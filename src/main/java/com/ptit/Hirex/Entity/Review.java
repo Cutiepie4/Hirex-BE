@@ -1,4 +1,4 @@
 package com.ptit.Hirex.Entity;
 
-public class Employees {
+public class Review {
 }
