@@ -1,10 +1,10 @@
 package com.ptit.Hirex.repository;
 
-import com.ptit.Hirex.entity.Employer;
+import com.ptit.Hirex.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EmployerRepository extends JpaRepository<Employer, Integer> {
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
 }
