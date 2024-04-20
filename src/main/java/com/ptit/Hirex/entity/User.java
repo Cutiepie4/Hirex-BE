@@ -9,6 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,15 +42,19 @@ public class User extends BaseEntity implements UserDetails {
 	@Column(name = "phone_number", length = 10, nullable = false)
 	private String phoneNumber;
 
+	@JsonIgnore
 	@Column(name = "password", length = 200, nullable = false)
 	private String password;
 
+	@JsonIgnore
 	@Column(name = "is_active")
 	private boolean active;
 
+	@JsonIgnore
 	@Column(name = "facebook_account_id")
 	private int facebookAccountId;
 
+	@JsonIgnore
 	@Column(name = "google_account_id")
 	private int googleAccountId;
 

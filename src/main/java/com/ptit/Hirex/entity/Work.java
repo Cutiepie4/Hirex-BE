@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -22,6 +24,14 @@ public class Work {
     private String name;
 
     private String address;
+
+    private LocalTime startTime;
+
+    private LocalTime endTime;
+
+    private LocalDate startDate;
+
+    private LocalDate endDate;
 
     @ManyToMany
     @JoinTable(
@@ -46,6 +56,14 @@ public class Work {
     @ManyToOne
     @JoinColumn(name = "employer_id", referencedColumnName = "id")
     private Employer employer;
+
+    @ManyToMany
+    @JoinTable(
+        name = "work_employee", 
+        joinColumns = @JoinColumn(name = "work_id"), 
+        inverseJoinColumns = @JoinColumn(name = "employee_id")
+    )
+    private List<Employee> employees;
 
     @CreatedDate
     private Instant createOn;

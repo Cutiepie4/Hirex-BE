@@ -17,8 +17,8 @@ public class Hire {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToMany(mappedBy = "hire", cascade = CascadeType.ALL)
-    private List<Schedule> scheduleList;
+    // @OneToMany(mappedBy = "hire", cascade = CascadeType.ALL)
+    // private List<Schedule> scheduleList;
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
