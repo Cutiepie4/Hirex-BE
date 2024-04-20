@@ -3,6 +3,8 @@ package com.ptit.Hirex.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ptit.Hirex.dtos.LeaveReasonDTO;
@@ -39,6 +41,15 @@ public class LeaveReasonServiceImpl implements LeaveReasonService {
         } else {
             throw new Exception("Item with ID " + id + " not found.");
         }
+    }
+
+    @Override
+    public boolean checkExistReason(int itemId) throws Exception {
+        Optional<Items> itemOptional = itemsRepository.findById(itemId);
+        if (itemOptional.isPresent()) {
+            return true;
+        }
+        return false;
     }
 
     

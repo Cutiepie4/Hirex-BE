@@ -3,6 +3,7 @@ package com.ptit.Hirex.controller;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +44,16 @@ public class LeaveReasonController {
             return leaveReasonServiceImpl.getLeaveReasonsByItem(id);
         } catch (Exception e) {
             return Collections.emptyList();
+        }
+    }
+    
+    @GetMapping("/checkItemExist/{itemId}")
+    public ResponseEntity<Boolean> checkExistReason(@PathVariable int itemId) {
+        try {
+            boolean itemExists = leaveReasonServiceImpl.checkExistReason(itemId);
+            return new ResponseEntity<>(itemExists, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }
