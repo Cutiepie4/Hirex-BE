@@ -9,21 +9,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.ptit.Hirex.entity.Message;
+import com.ptit.Hirex.request.DeviceTokenRequest;
 import com.ptit.Hirex.request.PnsRequest;
 import com.ptit.Hirex.service.FCMService;
 
 @RequestMapping("${api.prefix}")
 @RestController
-public class MessageController {
+public class FCMController {
 
     @Autowired
-    private FCMService fcmService;
+    FCMService fcmService;
 
     @PostMapping("/notification")
-    public String sendSampleNotification(@RequestBody PnsRequest pnsRequest) {
-        fcmService.pushNotification(pnsRequest);
-        return "da gui";
+    public ResponseEntity<String> sendSampleNotification(@RequestBody PnsRequest pnsRequest) {
+        try {
+            fcmService.pushNotification(pnsRequest);
+        } catch (FirebaseMessagingException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Error occured when sending nofitication.");
+        }
+        return ResponseEntity.ok("Nofification sent");
+    }
+
+    @PostMapping("/save-device-token")
+    public ResponseEntity<String> saveDeviceToken(@RequestBody DeviceTokenRequest deviceTokenRequest) {
+        boolean ok = fcmService.saveDeviceToken(deviceTokenRequest);
+        if (ok) {
+            return ResponseEntity.ok("Device token saved!");
+        }
+        return ResponseEntity.badRequest().body("Error occured when saving device token");
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -38,5 +54,4 @@ public class MessageController {
     public String ok() {
         return "quan dep trai";
     }
-
 }
