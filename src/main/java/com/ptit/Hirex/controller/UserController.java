@@ -16,7 +16,9 @@ import com.ptit.Hirex.dtos.UserDTO;
 import com.ptit.Hirex.dtos.UserLoginDTO;
 import com.ptit.Hirex.entity.User;
 import com.ptit.Hirex.responses.LoginResponse;
+import com.ptit.Hirex.responses.RegisterResponse;
 import com.ptit.Hirex.service.impl.UserServiceImpl;
+import com.ptit.Hirex.utils.MessageKeys;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,22 +31,28 @@ public class UserController {
 	private final UserServiceImpl userServiceImpl;
 
 	@PostMapping("/register")
-	public ResponseEntity<?> createUser(@Validated @RequestBody UserDTO userDTO, BindingResult result) {
-		try {
-			if (result.hasErrors()) {
-				List<String> errorMessages = result.getFieldErrors().stream().map(FieldError::getDefaultMessage)
-						.toList();
-				return ResponseEntity.badRequest().body(errorMessages);
-			}
-			if (!userDTO.getPassword().equals(userDTO.getRetypePassword())) {
-				return ResponseEntity.badRequest().body("Password does not match");
-			}
+	public ResponseEntity<RegisterResponse> createUser(@Validated @RequestBody UserDTO userDTO, BindingResult result) {
 
+		RegisterResponse registerResponse = new RegisterResponse();
+
+		if (result.hasErrors()) {
+			List<String> errorMessages = result.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
+			registerResponse.setMessage(errorMessages.toString());
+			return ResponseEntity.badRequest().body(registerResponse);
+		}
+
+		if (!userDTO.getPassword().equals(userDTO.getRetypePassword())) {
+			registerResponse.setMessage(MessageKeys.PASSWORD_NOT_MATCH);
+			return ResponseEntity.badRequest().body(registerResponse);
+		}
+		try {
 			User user = userServiceImpl.createUser(userDTO);
-//            return ResponseEntity.ok("Register successfully");
-			return ResponseEntity.ok(user);
+			registerResponse.setMessage(MessageKeys.REGISTER_SUCCESSFULLY);
+			registerResponse.setUser(user);
+			return ResponseEntity.ok(registerResponse);
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
+			registerResponse.setMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(registerResponse);
 		}
 
 	}
@@ -59,6 +67,7 @@ public class UserController {
 		} catch (Exception e) {
 			// It's usually a good idea to log the exception as well.
 			// LOG.error("Login failed", e);
+			
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}

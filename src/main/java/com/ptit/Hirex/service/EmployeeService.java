@@ -5,5 +5,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface EmployeeService {
-    void save(Employee employee);
+    
+    void update(Employee employee);
+    
+    void delete(Long id);
+
+	Employee save(Long idUser);
+
+    Employee getEmployee(Long userId);
 }

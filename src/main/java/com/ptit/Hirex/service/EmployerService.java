@@ -1,9 +1,13 @@
 package com.ptit.Hirex.service;
 
-import com.ptit.Hirex.entity.Employer;
 import org.springframework.stereotype.Service;
+
+import com.ptit.Hirex.entity.Employer;
 
 @Service
 public interface EmployerService {
-    void save(Employer employer);
+	
+	Employer save(Long idUser);
+
+	Employer getEmployer(Long userId);
 }
