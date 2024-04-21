@@ -13,6 +13,7 @@ import com.ptit.Hirex.components.JwtTokenUtil;
 import com.ptit.Hirex.dtos.UserDTO;
 import com.ptit.Hirex.entity.Employee;
 import com.ptit.Hirex.entity.Employer;
+import com.ptit.Hirex.entity.DeviceToken;
 import com.ptit.Hirex.entity.Role;
 import com.ptit.Hirex.entity.User;
 import com.ptit.Hirex.exceptions.DataNotFoundException;
@@ -100,4 +101,28 @@ public class UserServiceImpl implements UserService {
 		return new LoginResponse(token, role, id, name);
 	}
 
+    @Override
+    public User findByPhoneNumber(String phoneNumber) {
+        Optional<User> user = userRepository.findByPhoneNumber(phoneNumber);
+        if (user.isPresent()) {
+            return user.get();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean addDeviceToken(User user, String newDeviceTokenString) {
+        boolean deviceTokenExists = user.getDeviceTokens().stream()
+                .anyMatch(deviceToken -> deviceToken.getDeviceToken().equals(newDeviceTokenString));
+
+        if (!deviceTokenExists) {
+            DeviceToken newDeviceToken = new DeviceToken();
+            newDeviceToken.setDeviceToken(newDeviceTokenString);
+            newDeviceToken.setUser(user);
+            user.getDeviceTokens().add(newDeviceToken);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
 }

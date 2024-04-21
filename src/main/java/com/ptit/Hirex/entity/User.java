@@ -9,6 +9,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,6 +19,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,18 +50,22 @@ public class User extends BaseEntity implements UserDetails {
 	@Column(name = "phone_number", length = 10, nullable = false)
 	private String phoneNumber;
 
+	@JsonIgnore
 	@Column(name = "password", length = 200, nullable = false)
 	private String password;
 	
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
 
+	@JsonIgnore
 	@Column(name = "is_active")
 	private boolean active;
 
+	@JsonIgnore
 	@Column(name = "facebook_account_id")
 	private int facebookAccountId;
 
+	@JsonIgnore
 	@Column(name = "google_account_id")
 	private int googleAccountId;
 
@@ -65,7 +73,7 @@ public class User extends BaseEntity implements UserDetails {
 	@JoinColumn(name = "role_id")
 	private Role role;
 
-	//Lấy ra các quyền
+	// Lấy ra các quyền
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
@@ -99,4 +107,20 @@ public class User extends BaseEntity implements UserDetails {
 		return true;
 	}
 
+	@Builder.Default
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<DeviceToken> deviceTokens = new ArrayList<>();
+
+	public boolean addDeviceToken(String newDeviceTokenString) {
+		boolean deviceTokenExists = deviceTokens.stream()
+				.anyMatch(deviceToken -> deviceToken.getDeviceToken().equals(newDeviceTokenString));
+
+		if (!deviceTokenExists) {
+			DeviceToken newDeviceToken = new DeviceToken();
+			newDeviceToken.setDeviceToken(newDeviceTokenString);
+			deviceTokens.add(newDeviceToken);
+			return true;
+		}
+		return false;
+	}
 }

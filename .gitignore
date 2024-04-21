@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+postgres_data
+hirex-app-1e2dd-firebase-adminsdk-e43se-2b6c818733.json

@@ -7,6 +7,11 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Data
 @Entity
@@ -17,19 +22,14 @@ public class Schedule {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    private LocalDate date;
+
     @ManyToOne
     @JoinColumn(name = "work_id", referencedColumnName = "id")
     private Work work;
 
-    private LocalTime startTime;
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Items> items;
 
-    private LocalTime endTime;
-
-    private LocalDate startDate;
-
-    private LocalDate endDate;
-
-    @ManyToOne
-    @JoinColumn(name = "hire_id", referencedColumnName = "id")
-    private Hire hire;
 }
