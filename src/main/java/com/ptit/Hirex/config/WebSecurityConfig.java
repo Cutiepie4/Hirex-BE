@@ -14,8 +14,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-
-
 import java.util.Arrays;
 import java.util.List;
 import com.ptit.Hirex.entity.Role;
@@ -30,44 +28,38 @@ import lombok.RequiredArgsConstructor;
 public class WebSecurityConfig {
 
     private final JwtTokenFilter jwtTokenFilter;
-	
-	@Value("${api.prefix}")
-	private String apiPrefix;
-	
-	@Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)  throws Exception{
-        http
-                .csrf(AbstractHttpConfigurer::disable)
+
+    @Value("${api.prefix}")
+    private String apiPrefix;
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(requests -> {
                     requests
                             .requestMatchers(
                                     String.format("%s/users/register", apiPrefix),
-                                    String.format("%s/users/login", apiPrefix)
-                            )
+                                    String.format("%s/users/login", apiPrefix))
                             .permitAll()
 
-                            .requestMatchers(GET,
-                                    String.format("%s/test**", apiPrefix)).hasAnyRole(Role.USER, Role.ADMIN)
                             .anyRequest().authenticated();
-
                 })
                 .csrf(AbstractHttpConfigurer::disable);
-                http.cors(new Customizer<CorsConfigurer<HttpSecurity>>() {
-                    @Override
-                    public void customize(CorsConfigurer<HttpSecurity> httpSecurityCorsConfigurer) {
-                        CorsConfiguration configuration = new CorsConfiguration();
-                        configuration.setAllowedOrigins(List.of("*"));
-                        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-                        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
-                        configuration.setExposedHeaders(List.of("x-auth-token"));
-                        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-                        source.registerCorsConfiguration("/**", configuration);
-                        httpSecurityCorsConfigurer.configurationSource(source);
-                    }
-                });
+        http.cors(new Customizer<CorsConfigurer<HttpSecurity>>() {
+            @Override
+            public void customize(CorsConfigurer<HttpSecurity> httpSecurityCorsConfigurer) {
+                CorsConfiguration configuration = new CorsConfiguration();
+                configuration.setAllowedOrigins(List.of("*"));
+                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+                configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+                configuration.setExposedHeaders(List.of("x-auth-token"));
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                source.registerCorsConfiguration("/**", configuration);
+                httpSecurityCorsConfigurer.configurationSource(source);
+            }
+        });
 
-     
         return http.build();
     }
 }
