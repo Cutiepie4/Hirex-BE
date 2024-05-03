@@ -7,7 +7,7 @@ import com.ptit.Hirex.entity.Schedule;
 import java.util.List;
 
 public interface ScheduleService {
-    List<Schedule> getALlSchedules() throws Exception;
+    List<Schedule> getSchedulesByUserId(String phoneNumber) throws Exception;
     Schedule createSchedule(SchedulesDTO schedulesDTO) throws Exception;
     Items updateSchedule(int id,SchedulesDTO schedulesDTO) throws Exception;
     boolean deleteSchedule(int id) throws Exception;

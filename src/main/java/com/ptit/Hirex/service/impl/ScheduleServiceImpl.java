@@ -5,6 +5,7 @@ import com.ptit.Hirex.entity.Items;
 import com.ptit.Hirex.entity.Schedule;
 import com.ptit.Hirex.repository.ItemsRepository;
 import com.ptit.Hirex.repository.ScheduleRepository;
+import com.ptit.Hirex.repository.UserRepository;
 import com.ptit.Hirex.service.ScheduleService;
 
 import io.micrometer.common.util.StringUtils;
@@ -14,8 +15,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Service
@@ -23,51 +25,48 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final ItemsRepository itemsRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public List<Schedule> getALlSchedules() throws Exception {
-        return scheduleRepository.findAll();
+    public List<Schedule> getSchedulesByUserId(String phoneNumber) {
+        return userRepository.findByPhoneNumber(phoneNumber)
+                .map(user -> scheduleRepository.findByUser(user))
+                .orElse(Collections.emptyList());
     }
 
     @Override
     public Schedule createSchedule(SchedulesDTO schedulesDTO) {
         validateScheduleDTO(schedulesDTO);
-        Schedule schedule = null;
-        try{
-            
-            schedule = scheduleRepository.findByDate(schedulesDTO.getDate());
-            if (schedule == null) {
-                schedule = new Schedule();
-                schedule.setDate(schedulesDTO.getDate());
-                schedule.setItems(new ArrayList<>());
-                schedule = scheduleRepository.save(schedule);
-            }
-            Items item = schedulesDTO.getItems();
-            validateItem(item);
-            item.setSchedule(schedule);
-            itemsRepository.save(item);
-        } catch (Exception e) {
-            e.printStackTrace();
+        Schedule schedule = scheduleRepository.findByDate(schedulesDTO.getDate());
+        if (schedule == null) {
+            schedule = new Schedule();
+            schedule.setDate(schedulesDTO.getDate());
+            schedule.setItems(new ArrayList<>());
+            schedule = scheduleRepository.save(schedule);
         }
+        Items item = schedulesDTO.getItems();
+        validateItem(item);
+        item.setSchedule(schedule);
+        itemsRepository.save(item);
+
         return schedule;
     }
 
     @Override
-    public Items updateSchedule(int id, SchedulesDTO schedulesDTO) throws Exception {
-        Optional<Items> itemsOptional = itemsRepository.findById(id);
+    public Items updateSchedule(int id, SchedulesDTO schedulesDTO) {
+        return itemsRepository.findById(id)
+                .map(item -> updateItemFields(item, schedulesDTO.getItems()))
+                .map(itemsRepository::save)
+                .orElseThrow(() -> new NoSuchElementException("No item found with id: " + id));
+    }
 
-        if (itemsOptional.isPresent()) {
-            Items item = itemsOptional.get();
-            item.setStartTime(schedulesDTO.getItems().getStartTime());
-            item.setEndTime(schedulesDTO.getItems().getEndTime());
-            item.setTitle(schedulesDTO.getItems().getTitle());
-            item.setType(schedulesDTO.getItems().getType());
-            item.setNotes(schedulesDTO.getItems().getNotes());
-            return itemsRepository.save(item);
-        }
-        else {
-            throw new Exception("No item found with id: " + id);
-        }
+    private Items updateItemFields(Items item, Items scheduleItemDetails) {
+        item.setStartTime(scheduleItemDetails.getStartTime());
+        item.setEndTime(scheduleItemDetails.getEndTime());
+        item.setTitle(scheduleItemDetails.getTitle());
+        item.setType(scheduleItemDetails.getType());
+        item.setNotes(scheduleItemDetails.getNotes());
+        return item;
     }
 
     @Override
@@ -88,17 +87,19 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private void validateItem(Items item) {
         if (StringUtils.isBlank(item.getTitle()) || StringUtils.isBlank(item.getNotes())) {
-            throw new IllegalArgumentException("Item title is required.");
+            throw new IllegalArgumentException("Lỗi, không được để trống tiêu đề");
         }
-        if(!(item.getType() == "personal" || item.getType() == "working")){
-            throw new IllegalArgumentException("Type is not correct.");
+        System.out.println(1);
+        if(!(item.getType().equals("personal") || item.getType().equals("working"))){
+            throw new IllegalArgumentException("Loại sai định dạng");
         }
+        System.out.println(2);
         if (item.getStartTime() == null || item.getEndTime() == null) {
-            throw new IllegalArgumentException("Start time and end time are required.");
+            throw new IllegalArgumentException("Lỗi, không được để trống thời gian");
         }
-
+        System.out.println(3);
         if (item.getStartTime().isAfter(item.getEndTime())) {
-            throw new IllegalArgumentException("Start time cannot be after end time.");
+            throw new IllegalArgumentException("Lỗi, Thời gian bắt đầu không thể sau thời gian kết thúc");
         }
     }
 }

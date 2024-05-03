@@ -10,4 +10,8 @@ public interface LeaveReasonService {
     List<LeaveReason> getLeaveReasonsByItem(int id) throws Exception;
     
     boolean checkExistReason(int itemId) throws Exception;
+    LeaveReason acceptReason(int reasonId) throws Exception;
+    LeaveReason rejectReason(int reasonId) throws Exception;
+    
+    int countReason(int itemId) throws Exception;
 }

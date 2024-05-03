@@ -6,6 +6,7 @@ import com.ptit.Hirex.entity.Schedule;
 import com.ptit.Hirex.service.impl.ScheduleServiceImpl;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,23 +27,26 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class ScheduleController {
     private final ScheduleServiceImpl scheduleServiceImpl;
-    @GetMapping("/schedules")
-    public List<Schedule> getAllSchedules() {
+
+    @GetMapping("/schedules_by_user/{phoneNumber}")
+    public List<Schedule> getAllSchedules(@PathVariable String phoneNumber) {
         try {
-            return scheduleServiceImpl.getALlSchedules();
+            return scheduleServiceImpl.getSchedulesByUserId(phoneNumber);
         } catch (Exception e) {
             return Collections.emptyList();
         }
     }
 
     @PostMapping("/schedules")
-    public ResponseEntity<Schedule> createSchedule(@RequestBody SchedulesDTO schedulesDTO) {
+    public ResponseEntity<?> createSchedule(@RequestBody SchedulesDTO schedulesDTO) {
         try {
-            System.out.println(schedulesDTO);
             Schedule newSchedule = scheduleServiceImpl.createSchedule(schedulesDTO);
             return ResponseEntity.ok(newSchedule);
+        } catch (IllegalArgumentException e) {
+            System.out.println("kfds" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗi xảy ra, vui lòng thử lại");
         }
     }
 

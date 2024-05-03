@@ -26,7 +26,7 @@ public class LeaveReasonServiceImpl implements LeaveReasonService {
     public LeaveReason createLeaveReason(LeaveReasonDTO leaveReasonDTO) throws Exception {
         LeaveReason leaveReason = new LeaveReason();
         Items item = itemsRepository.findById(leaveReasonDTO.getItemId())
-                .orElseThrow(() -> new Exception("Item with ID " + leaveReasonDTO.getItemId() + " not found."));
+                .orElseThrow(() -> new Exception("Không tìm thấy Item"));
         leaveReason.setItems(item);
         leaveReason.setReason(leaveReasonDTO.getLeaveReason());
         return leaveReasonRepository.save(leaveReason);
@@ -34,13 +34,7 @@ public class LeaveReasonServiceImpl implements LeaveReasonService {
 
     @Override
     public List<LeaveReason> getLeaveReasonsByItem(int id) throws Exception {
-        Optional<Items> itemOptional = itemsRepository.findById(id);
-        if (itemOptional.isPresent()) {
-            Items item = itemOptional.get();
-            return leaveReasonRepository.findByItems(item);
-        } else {
-            throw new Exception("Item with ID " + id + " not found.");
-        }
+        return leaveReasonRepository.findByItems(itemsRepository.findById(id).orElseThrow(() -> new Exception("Lỗi, không lấy được lý do")));
     }
 
     @Override
@@ -52,5 +46,26 @@ public class LeaveReasonServiceImpl implements LeaveReasonService {
         return false;
     }
 
-    
+    @Override
+    public LeaveReason acceptReason(int reasonId) throws Exception {
+        LeaveReason leaveReason = leaveReasonRepository.findById(reasonId).orElseThrow(
+                () -> new Exception("Lỗi:" + reasonId));
+
+        leaveReason.setIsAccept(true);
+        return leaveReasonRepository.save(leaveReason);
+    }
+
+    @Override
+    public LeaveReason rejectReason(int reasonId) throws Exception {
+        System.out.println("hihihihi");
+        LeaveReason leaveReason = leaveReasonRepository.findById(reasonId).orElseThrow(
+                () -> new Exception("Lỗi: "+reasonId));
+        leaveReason.setIsAccept(false);
+        return leaveReasonRepository.save(leaveReason);
+    }
+
+    @Override
+    public int countReason(int itemId) {
+        return leaveReasonRepository.countByItemIdAndIsAcceptIsNull(itemId);
+    }
 }

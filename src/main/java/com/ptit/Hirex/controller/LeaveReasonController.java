@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,11 +48,42 @@ public class LeaveReasonController {
         }
     }
     
-    @GetMapping("/checkItemExist/{itemId}")
+    @GetMapping("/leave/checkItemExist/{itemId}")
     public ResponseEntity<Boolean> checkExistReason(@PathVariable int itemId) {
         try {
             boolean itemExists = leaveReasonServiceImpl.checkExistReason(itemId);
             return new ResponseEntity<>(itemExists, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/leave/acceptReason/{reasonId}")
+    public ResponseEntity<LeaveReason> acceptReason(@PathVariable int reasonId){
+        try {
+            LeaveReason leaveReason = leaveReasonServiceImpl.acceptReason(reasonId);
+            return new ResponseEntity<>(leaveReason, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        
+    }
+
+    @PutMapping("/leave/rejectReason/{reasonId}")
+    public ResponseEntity<LeaveReason> rejectReason(@PathVariable int reasonId){
+        try {
+            LeaveReason leaveReason = leaveReasonServiceImpl.rejectReason(reasonId);
+            return new ResponseEntity<>(leaveReason, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @GetMapping("/leave/countReason/{itemId}")
+    public ResponseEntity<Integer> countReason(@PathVariable int itemId) {
+        try {
+            int noReason  = leaveReasonServiceImpl.countReason(itemId);
+            return new ResponseEntity<>(noReason, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
