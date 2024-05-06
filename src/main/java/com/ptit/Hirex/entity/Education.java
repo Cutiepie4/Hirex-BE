@@ -20,19 +20,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "experience")
-public class Experience {
+@Table(name = "education")
+public class Education {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "job_title")
-    private String jobTitle;
+    @Column(name = "level")
+    private String level;
 
-    @Column(name = "company")
-    private String company;
+    @Column(name = "institution")
+    private String institution;
 
+    @Column(name = "major")
+    private String major;
+    
     @Column(name = "description")
     private String description;
 

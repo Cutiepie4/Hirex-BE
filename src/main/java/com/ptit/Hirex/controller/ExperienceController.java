@@ -13,27 +13,22 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class ExperienceController {
 
-    private final ExperienceService experienceService;
-
     @Autowired
-    public ExperienceController(ExperienceService experienceService) {
-        this.experienceService = experienceService;
-    }
+    private ExperienceService experienceService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<String> saveExperience(@RequestBody ExperienceDTO experienceDTO) {
-//    	System.out.print(experienceDTO);
         experienceService.saveExperience(experienceDTO);
         return new ResponseEntity<>("Experience saved successfully", HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateExperience(@PathVariable Long id, @RequestBody ExperienceDTO experienceDTO) {
+
         experienceService.updateExperience(id, experienceDTO);
         return new ResponseEntity<>("Experience updated successfully", HttpStatus.OK);
     }
-
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteExperience(@PathVariable Long id) {
         experienceService.deleteExperience(id);

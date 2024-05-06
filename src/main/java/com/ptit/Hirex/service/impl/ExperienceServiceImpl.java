@@ -33,14 +33,23 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     public void updateExperience(Long experienceId, ExperienceDTO experienceDTO) {
+    	
         Experience experience = experienceRepository.findById(experienceId)
             .orElseThrow(() -> new RuntimeException("Experience not found for id: " + experienceId));
-
+            
         Employee employee = employeeRepository.findById(experienceDTO.getEmployeeId())
-            .orElseThrow(() -> new RuntimeException("Employee not found for id: " + experienceDTO.getEmployeeId()));
-
-        modelMapper.map(experienceDTO, experience);
-        experience.setEmployee(employee); // Đảm bảo Experience được gán cho đúng Employee
+                .orElseThrow(() -> new RuntimeException("Employee not found for id: " + experienceDTO.getEmployeeId()));
+        
+         experience = Experience.builder()
+        		.id(experienceDTO.getId())
+        		.jobTitle(experienceDTO.getJobTitle())
+        		.description(experienceDTO.getDescription())
+        		.startDate(experienceDTO.getStartDate())
+        		.endDate(experienceDTO.getEndDate())
+        		.company(experienceDTO.getCompany())
+				.build();
+        experience.setEmployee(employee);
+        
         experienceRepository.save(experience);
     }
 

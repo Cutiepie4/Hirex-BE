@@ -125,4 +125,35 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+    
+    @Override
+    public User updatePassword(String phoneNumber, String oldPassword, String newPassword) throws Exception {
+        // Tìm người dùng theo số điện thoại
+        Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
+        if (optionalUser.isEmpty()) {
+            throw new DataNotFoundException("User not found");
+        }
+        User user = optionalUser.get();
+        
+        // Kiểm tra mật khẩu cũ
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new BadCredentialsException("Incorrect old password");
+        }
+        
+        // Kiểm tra và cập nhật mật khẩu mới
+        if (!newPassword.equals(oldPassword)) {
+            // Mã hóa mật khẩu mới
+            String encodedNewPassword = passwordEncoder.encode(newPassword);
+            user.setPassword(encodedNewPassword);
+            // Lưu thay đổi vào cơ sở dữ liệu
+            userRepository.save(user);
+            return user;
+        } else {
+            throw new IllegalArgumentException("New password must be different from old password");
+        }
+    }
 }

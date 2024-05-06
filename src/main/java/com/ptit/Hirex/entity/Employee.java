@@ -3,6 +3,7 @@ package com.ptit.Hirex.entity;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,11 +26,20 @@ import lombok.NoArgsConstructor;
 public class Employee {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
+    @Column(name = "about")
+    private String about;
+    
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Experience> experiences;
+    
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<Education> educations;
+    
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<Certification> Certification;
 }

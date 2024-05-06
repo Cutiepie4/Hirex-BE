@@ -14,7 +14,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class EmployeeDTO {
 
-    private Long id;
-    private User user;
-    private List<ExperienceDTO> experiences;
+    private String about; 
 }

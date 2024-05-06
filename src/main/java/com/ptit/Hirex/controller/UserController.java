@@ -1,5 +1,6 @@
 package com.ptit.Hirex.controller;
 
+import java.util.Base64;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -8,10 +9,14 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.ptit.Hirex.dtos.UpdatePasswordDTO;
 import com.ptit.Hirex.dtos.UserDTO;
 import com.ptit.Hirex.dtos.UserLoginDTO;
 import com.ptit.Hirex.entity.User;
@@ -71,4 +76,39 @@ public class UserController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
+	
+	@PostMapping("/uploadImage")
+	public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile image, @RequestParam("phoneNumber") String phoneNumber) {
+	    try {
+	        User user = userServiceImpl.findByPhoneNumber(phoneNumber);
+	        if (user == null) {
+	            return ResponseEntity.badRequest().body("User not found");
+	        }
+	        
+	        String imageBase64 = Base64.getEncoder().encodeToString(image.getBytes());
+	        
+	        user.setImageBase64(imageBase64);
+	        
+	        userServiceImpl.saveUser(user);
+	        
+	        return ResponseEntity.ok("Image uploaded successfully for user: " + user.getFullName());
+	    } catch (Exception e) {
+	        return ResponseEntity.badRequest().body("Error uploading image: " + e.getMessage());
+	    }
+	}
+	
+	
+    @PutMapping("/updatePassword")
+    public ResponseEntity<?> updatePassword(@Validated @RequestBody UpdatePasswordDTO updatePasswordDTO) {
+        try {
+            User updatedUser = userServiceImpl.updatePassword(updatePasswordDTO.getPhoneNumber(), 
+                                                             updatePasswordDTO.getOldPassword(), 
+                                                             updatePasswordDTO.getNewPassword());
+            // Gửi phản hồi về client với thông tin cập nhật thành công
+            return ResponseEntity.ok("Password updated successfully for user: " + updatedUser.getFullName());
+        } catch (Exception e) {
+            // Xử lý lỗi nếu có
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

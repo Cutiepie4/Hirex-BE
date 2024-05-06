@@ -33,10 +33,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void update(Employee employee) {
-        if (employee.getId() <= 0 || !employeeRepository.existsById((long) employee.getId())) {
-            throw new IllegalArgumentException("Invalid employee ID or employee does not exist.");
-        }
+    public void updateAbout(Long id, String about) {
+        Employee employee = employeeRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Employee not found with id: " + id));
+        employee.setAbout(about);
         employeeRepository.save(employee);
     }
 

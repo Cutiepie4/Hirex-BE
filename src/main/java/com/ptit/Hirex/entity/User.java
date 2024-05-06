@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -56,6 +57,9 @@ public class User extends BaseEntity implements UserDetails {
 	
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
+    
+    @Column(name = "image_base64", columnDefinition = "TEXT")
+    private String imageBase64;
 
 	@JsonIgnore
 	@Column(name = "is_active")

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface EmployeeService {
     
-    void update(Employee employee);
+    void updateAbout(Long id, String about);
     
     void delete(Long id);
 
