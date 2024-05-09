@@ -42,4 +42,8 @@ public class Employee {
     
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Certification> Certification;
+    
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<Resume> resumes;
+
 }

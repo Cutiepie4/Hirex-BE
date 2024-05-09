@@ -35,9 +35,10 @@ public class UserDTO {
 	
     private String address;
 
+    private String mail;
 
     @JsonProperty("date_of_birth")
-    private Date dateOfBirth;
+    private String dateOfBirth;
 	
 	@JsonProperty("facebook_account_id")
 	private int facebookAccountId;
