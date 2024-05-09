@@ -26,14 +26,16 @@ public class EducationController {
 
     @PostMapping("/create")
     public ResponseEntity<String> saveEducation(@RequestBody EducationDTO educationDTO) {
-//    	System.out.print(experienceDTO);
+//    	System.out.print(educationDTO);
     	educationServiceImpl.saveEducation(educationDTO);
         return new ResponseEntity<>("Education saved successfully", HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateEducation(@PathVariable Long id, @RequestBody EducationDTO educationDTO) {
+    	System.out.print(educationDTO);
 
+    	
     	educationServiceImpl.updateEducation (id, educationDTO);
         return new ResponseEntity<>("Experience updated successfully", HttpStatus.OK);
     }

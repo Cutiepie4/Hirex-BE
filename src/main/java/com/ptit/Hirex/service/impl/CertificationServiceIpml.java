@@ -56,6 +56,8 @@ public class CertificationServiceIpml implements CertificationService{
 		if (!certificationRepostitory.existsById(certificationId)) {
 			throw new RuntimeException("Experience not found for id: " + certificationId);
 		}
+		certificationRepostitory.deleteById(certificationId);
+
 	}
 
 }
