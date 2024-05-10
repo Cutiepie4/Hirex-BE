@@ -1,10 +1,13 @@
 package com.ptit.Hirex.service.impl;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ptit.Hirex.entity.Employee;
 import com.ptit.Hirex.entity.Resume;
+import com.ptit.Hirex.exceptions.EntityNotFoundException;
 import com.ptit.Hirex.repository.EmployeeRepository;
 import com.ptit.Hirex.repository.ResumeRepository;
 import com.ptit.Hirex.service.ResumeService;
@@ -31,4 +34,15 @@ public class ResumeServiceImpl implements ResumeService {
 
 		return resumeRepository.save(resume);
 	}
+
+	@Override
+    public Optional<Resume> getResumeById(long id) {
+        return resumeRepository.findById(id);
+    }
+
+    @Override
+    public Resume validateAndGetResumeById(long id) {
+        return getResumeById(id)
+                .orElseThrow(() -> new EntityNotFoundException("vcl"));
+    }
 }

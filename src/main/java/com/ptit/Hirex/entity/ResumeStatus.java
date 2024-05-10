@@ -1,6 +1,6 @@
 package com.ptit.Hirex.entity;
 
 
-public enum ApplicationStatus {
+public enum ResumeStatus {
     PENDING, ACCEPTED 
 }

@@ -9,8 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ApplicationWorkRequest {
-    private Long applicationId;
+public class ResumeWorkRequest {
+    private Long resumeId;
     private int workId;
     private String information;
 }

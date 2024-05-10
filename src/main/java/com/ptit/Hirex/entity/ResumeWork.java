@@ -13,17 +13,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "application_work")
-public class ApplicationWork extends BaseEntity {
+public class ResumeWork extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private ApplicationStatus status;
+    private ResumeStatus status;
+    
     private String information;
 
     @ManyToOne
-    @JoinColumn(name = "application_id", referencedColumnName = "id")
-    private Application application;
+    @JoinColumn(name = "resume_id", referencedColumnName = "id")
+    private Resume resume;
 
     @ManyToOne
     @JoinColumn(name = "work_id", referencedColumnName = "id")
@@ -31,11 +32,11 @@ public class ApplicationWork extends BaseEntity {
 
     @PrePersist
     public void onPrePersist() {
-        status = ApplicationStatus.PENDING;
+        status = ResumeStatus.PENDING;
     }
 
-    public ApplicationWork(Application application, Work work, String information) {
-        this.application = application;
+    public ResumeWork(Resume resume, Work work, String information) {
+        this.resume = resume;
         this.work = work;
         this.information = information;
     }
