@@ -36,7 +36,8 @@ public class CompanyController {
             byte[] imageBytes = image.getBytes();
             String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
             companyDTO.setImageBase64(imageBase64);
-        }
+        };
+        companyService.saveCompany(companyDTO);
         return new ResponseEntity<>("Company saved successfully", HttpStatus.CREATED);
     }
 

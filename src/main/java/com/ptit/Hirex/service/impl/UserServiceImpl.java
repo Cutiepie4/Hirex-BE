@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.ptit.Hirex.components.JwtTokenUtil;
 import com.ptit.Hirex.dtos.UserDTO;
+import com.ptit.Hirex.dtos.UserUpdateDTO;
 import com.ptit.Hirex.entity.Employee;
 import com.ptit.Hirex.entity.Employer;
 import com.ptit.Hirex.entity.DeviceToken;
@@ -36,6 +37,15 @@ public class UserServiceImpl implements UserService {
 	private final AuthenticationManager authenticationManager;
 	private final EmployeeServiceImpl employeeServiceImpl;
 	private final EmployerServiceImpl employerServiceImpl;
+
+	public User findById(Long id) {
+		Optional<User> userOptional = userRepository.findById(id);
+		if (userOptional.isPresent()) {
+			return userOptional.get();
+		} else {
+			return null;
+		}
+	}
 
 	@Override
 	public User createUser(UserDTO userDTO) throws Exception {
@@ -101,59 +111,92 @@ public class UserServiceImpl implements UserService {
 		return new LoginResponse(token, role, id, name);
 	}
 
-    @Override
-    public User findByPhoneNumber(String phoneNumber) {
-        Optional<User> user = userRepository.findByPhoneNumber(phoneNumber);
-        if (user.isPresent()) {
-            return user.get();
-        }
-        return null;
-    }
+	@Override
+	public User findByPhoneNumber(String phoneNumber) {
+		Optional<User> user = userRepository.findByPhoneNumber(phoneNumber);
+		if (user.isPresent()) {
+			return user.get();
+		}
+		return null;
+	}
 
-    @Override
-    public boolean addDeviceToken(User user, String newDeviceTokenString) {
-        boolean deviceTokenExists = user.getDeviceTokens().stream()
-                .anyMatch(deviceToken -> deviceToken.getDeviceToken().equals(newDeviceTokenString));
+	@Override
+	public boolean addDeviceToken(User user, String newDeviceTokenString) {
+		boolean deviceTokenExists = user.getDeviceTokens().stream()
+				.anyMatch(deviceToken -> deviceToken.getDeviceToken().equals(newDeviceTokenString));
 
-        if (!deviceTokenExists) {
-            DeviceToken newDeviceToken = new DeviceToken();
-            newDeviceToken.setDeviceToken(newDeviceTokenString);
-            newDeviceToken.setUser(user);
-            user.getDeviceTokens().add(newDeviceToken);
-            userRepository.save(user);
-            return true;
-        }
-        return false;
-    }
+		if (!deviceTokenExists) {
+			DeviceToken newDeviceToken = new DeviceToken();
+			newDeviceToken.setDeviceToken(newDeviceTokenString);
+			newDeviceToken.setUser(user);
+			user.getDeviceTokens().add(newDeviceToken);
+			userRepository.save(user);
+			return true;
+		}
+		return false;
+	}
 
-    public User saveUser(User user) {
-        return userRepository.save(user);
-    }
-    
-    @Override
-    public User updatePassword(String phoneNumber, String oldPassword, String newPassword) throws Exception {
-        // Tìm người dùng theo số điện thoại
-        Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
-        if (optionalUser.isEmpty()) {
-            throw new DataNotFoundException("User not found");
-        }
-        User user = optionalUser.get();
-        
-        // Kiểm tra mật khẩu cũ
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            throw new BadCredentialsException("Incorrect old password");
-        }
-        
-        // Kiểm tra và cập nhật mật khẩu mới
-        if (!newPassword.equals(oldPassword)) {
-            // Mã hóa mật khẩu mới
-            String encodedNewPassword = passwordEncoder.encode(newPassword);
-            user.setPassword(encodedNewPassword);
-            // Lưu thay đổi vào cơ sở dữ liệu
-            userRepository.save(user);
-            return user;
-        } else {
-            throw new IllegalArgumentException("New password must be different from old password");
-        }
-    }
+	public User saveUser(User user) {
+		return userRepository.save(user);
+	}
+
+	@Override
+	public User updatePassword(String phoneNumber, String oldPassword, String newPassword) throws Exception {
+		// Tìm người dùng theo số điện thoại
+		Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
+		if (optionalUser.isEmpty()) {
+			throw new DataNotFoundException("User not found");
+		}
+		User user = optionalUser.get();
+
+		// Kiểm tra mật khẩu cũ
+		if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+			throw new BadCredentialsException("Incorrect old password");
+		}
+
+		// Kiểm tra và cập nhật mật khẩu mới
+		if (!newPassword.equals(oldPassword)) {
+			// Mã hóa mật khẩu mới
+			String encodedNewPassword = passwordEncoder.encode(newPassword);
+			user.setPassword(encodedNewPassword);
+			// Lưu thay đổi vào cơ sở dữ liệu
+			userRepository.save(user);
+			return user;
+		} else {
+			throw new IllegalArgumentException("New password must be different from old password");
+		}
+	}
+	
+	public User updateUser(UserUpdateDTO userUpdateDTO) throws Exception {
+	    String fullName = userUpdateDTO.getFullName();
+	    String address = userUpdateDTO.getAddress();
+	    String mail = userUpdateDTO.getMail();
+	    String dateOfBirth = userUpdateDTO.getDateOfBirth();
+
+		Optional<User> optionalUser = userRepository.findByPhoneNumber(userUpdateDTO.getPhoneNumber());
+		
+		if (optionalUser.isEmpty()) {
+			throw new DataNotFoundException("User not found");
+		}
+		User user = optionalUser.get();
+
+
+	    if (fullName != null) {
+	        user.setFullName(fullName);
+	    }
+	    if (address != null) {
+	        user.setAddress(address);
+	    }
+	    if (mail != null) {
+	        user.setMail(mail);
+	    }
+	    if (dateOfBirth != null) {
+	        user.setDateOfBirth(dateOfBirth);
+	    }
+
+	    User updatedUser = userRepository.save(user);
+
+	    return updatedUser;
+	}
+
 }
