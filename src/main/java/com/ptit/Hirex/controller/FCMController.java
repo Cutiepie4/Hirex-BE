@@ -23,7 +23,7 @@ public class FCMController {
     FCMService fcmService;
 
     @PostMapping("/notification")
-    public ResponseEntity<String> sendSampleNotification(@RequestBody PnsRequest pnsRequest) {
+    public ResponseEntity<String> sendNotification(@RequestBody PnsRequest pnsRequest) {
         try {
             fcmService.pushNotification(pnsRequest);
         } catch (FirebaseMessagingException e) {
