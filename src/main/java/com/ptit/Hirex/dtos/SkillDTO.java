@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ResumeDTO {
-
-	    private Long id;
-	    private String nameFile;
-	    private String fileBase64;
-	    private long size;
-	    private Long employerId; 
-	    
+public class SkillDTO {
+    private Long id;
+    private String name;
+    private String note;
+    private Long employeeId; 
+    
 }

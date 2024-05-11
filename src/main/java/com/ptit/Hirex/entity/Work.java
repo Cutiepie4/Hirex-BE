@@ -56,6 +56,7 @@ public class Work {
     @ManyToOne
     @JoinColumn(name = "employer_id", referencedColumnName = "id")
     private Employer employer;
+    // ditme sai cu r
 
     @ManyToMany
     @JoinTable(
