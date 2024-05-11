@@ -24,6 +24,7 @@ public class ExperienceController {
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateExperience(@PathVariable Long id, @RequestBody ExperienceDTO experienceDTO) {
+    	System.out.print(experienceDTO);
 
         experienceService.updateExperience(id, experienceDTO);
         return new ResponseEntity<>("Experience updated successfully", HttpStatus.OK);

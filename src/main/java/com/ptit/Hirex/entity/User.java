@@ -56,7 +56,10 @@ public class User extends BaseEntity implements UserDetails {
 	private String password;
 	
     @Column(name = "date_of_birth")
-    private Date dateOfBirth;
+    private String dateOfBirth;
+    
+    @Column(name = "mail")
+    private String mail;
     
     @Column(name = "image_base64", columnDefinition = "TEXT")
     private String imageBase64;

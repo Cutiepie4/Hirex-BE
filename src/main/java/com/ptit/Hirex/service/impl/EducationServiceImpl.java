@@ -22,11 +22,23 @@ public class EducationServiceImpl implements EducationService {
 
 	@Override
 	public void saveEducation(EducationDTO educationDTO) {
-		Employee employee = employeeRepository.findById(educationDTO.getEmployeeId())
-				.orElseThrow(() -> new RuntimeException("Employee not found for id: " + educationDTO.getEmployeeId()));
-
-		Education education = modelMapper.map(educationDTO, Education.class);
+		    	
+        Employee employee = employeeRepository.findById(educationDTO.getEmployeeId())
+                .orElseThrow(() -> new RuntimeException("Employee not found for id: " + educationDTO.getEmployeeId()));
+        
+		Education education = Education.builder()
+				.id(educationDTO.getId())
+				.level(educationDTO.getLevel())
+				.institution(educationDTO.getInstitution())
+				.major(educationDTO.getMajor())
+				.description(educationDTO.getDescription())
+				.startDate(educationDTO
+				.getStartDate())
+				.endDate(educationDTO.getEndDate())
+				.build();
+		
 		education.setEmployee(employee);
+		
 		educationRepostitory.save(education);
 	}
 
