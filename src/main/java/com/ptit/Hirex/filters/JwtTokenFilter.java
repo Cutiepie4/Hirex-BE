@@ -68,7 +68,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 //                Pair.of(String.format("%s/categories", apiPrefix), "GET"),
 				Pair.of(String.format("%s/users/register", apiPrefix), "POST"),
 				Pair.of(String.format("%s/users/login", apiPrefix), "POST"),
-				Pair.of(String.format("%s/schdules", apiPrefix), "GET"), Pair.of("/test", "GET"),
+				Pair.of(String.format("%s/schdules", apiPrefix), "GET"), 
+				Pair.of("/test", "GET"),
 
 				Pair.of(String.format("%s/experiences/create", apiPrefix), "POST"),
 				Pair.of(String.format("%s/experiences", apiPrefix), "PUT"),
@@ -83,6 +84,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 				Pair.of(String.format("%s/certifications", apiPrefix), "DELETE"),
 
 				Pair.of(String.format("%s/resumes/upload", apiPrefix), "POST"),
+				Pair.of(String.format("%s/resumes", apiPrefix), "DELETE"),
+
+				Pair.of(String.format("%s/skills/create", apiPrefix), "POST"),
+				Pair.of(String.format("%s/skills", apiPrefix), "PUT"),
+				Pair.of(String.format("%s/skills", apiPrefix), "DELETE"),
+				
+				Pair.of(String.format("%s/companies", apiPrefix), "GET"),
+				Pair.of(String.format("%s/companies", apiPrefix), "PUT"),
+				Pair.of(String.format("%s/companies", apiPrefix), "DELETE"),
 
 				
 				Pair.of(String.format("%s/employees", apiPrefix), "GET"),

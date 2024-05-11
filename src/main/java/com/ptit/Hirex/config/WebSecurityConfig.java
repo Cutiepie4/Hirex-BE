@@ -48,20 +48,30 @@ public class WebSecurityConfig {
 //                            .requestMatchers(GET, "/test")
 //                            .hasAnyRole(Role.ADMIN)
                           .requestMatchers(GET, "/test").permitAll()
+                          
                           .requestMatchers(POST, String.format("%s/experiences/create", apiPrefix)).permitAll()
                           .requestMatchers(POST, String.format("%s/educations/create", apiPrefix)).permitAll()
                           .requestMatchers(POST, String.format("%s/resumes/upload", apiPrefix)).permitAll()
+                          .requestMatchers(POST, String.format("%s/skills/create", apiPrefix)).permitAll()
 
                           
                           .requestMatchers(DELETE, String.format("%s/experiences/**", apiPrefix)).permitAll()
                           .requestMatchers(DELETE, String.format("%s/educations/**", apiPrefix)).permitAll()
                           .requestMatchers(DELETE, String.format("%s/certifications/**", apiPrefix)).permitAll()
+                          .requestMatchers(DELETE, String.format("%s/resumes/**", apiPrefix)).permitAll()
+                          .requestMatchers(DELETE, String.format("%s/skills/**", apiPrefix)).permitAll()
+                          .requestMatchers(DELETE, String.format("%s/companies/**", apiPrefix)).permitAll()
+
 
                           .requestMatchers(PUT, String.format("%s/experiences/**", apiPrefix)).permitAll()
                           .requestMatchers(PUT, String.format("%s/educations/**", apiPrefix)).permitAll()
                           .requestMatchers(PUT, String.format("%s/certifications/**", apiPrefix)).permitAll()
+                          .requestMatchers(PUT, String.format("%s/skills/**", apiPrefix)).permitAll()
+                          .requestMatchers(PUT, String.format("%s/companies/**", apiPrefix)).permitAll()
 
+                          
                           .requestMatchers(GET, String.format("%s/employees/**", apiPrefix)).permitAll()
+                          .requestMatchers(GET, String.format("%s/companies/**", apiPrefix)).permitAll()
 
                           .requestMatchers(POST, String.format("%s/certifications/create", apiPrefix)).permitAll()
                           .requestMatchers(PUT, String.format("%s/employees/**", apiPrefix)).permitAll()
