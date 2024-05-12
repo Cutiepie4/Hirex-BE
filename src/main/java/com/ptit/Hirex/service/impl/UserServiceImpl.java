@@ -57,9 +57,9 @@ public class UserServiceImpl implements UserService {
 
 		Role role = roleRepository.findById(userDTO.getRoleId())
 				.orElseThrow(() -> new DataNotFoundException("Role not found"));
-		if (role.getName().toUpperCase().equals(Role.ADMIN)) {
-			throw new PermissionDenyException("You cannot register an admin account");
-		}
+		// if (role.getName().toUpperCase().equals(Role.ADMIN)) {
+		// 	throw new PermissionDenyException("You cannot register an admin account");
+		// }
 
 		// convert from userDTO => user
 		User newUser = User.builder().fullName(userDTO.getFullName()).phoneNumber(userDTO.getPhoneNumber())

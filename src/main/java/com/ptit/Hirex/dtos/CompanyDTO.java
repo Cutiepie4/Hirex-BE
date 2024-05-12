@@ -21,7 +21,7 @@ public class CompanyDTO {
     private String industry;
     private String website;
     private String imageBase64;
-    private Long employerId; 
+    private EmployerDTO employer; 
     
     private MultipartFile file;
 }

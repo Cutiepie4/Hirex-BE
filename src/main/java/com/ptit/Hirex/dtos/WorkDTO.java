@@ -33,6 +33,7 @@ public class WorkDTO {
     // private List<Ability> requiredAbilities;
     // private List<Ability> optionalAbilities;
     private ExpertDTO expert;
+    private CompanyDTO company;
     // private Employer employer;
     // private List<Employee> employees;
     private Instant createOn;

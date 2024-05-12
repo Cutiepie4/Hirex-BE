@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "application_work")
+@Table(name = "resume_work")
 public class ResumeWork extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

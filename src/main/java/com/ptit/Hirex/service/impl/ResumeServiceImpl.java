@@ -1,6 +1,6 @@
 package com.ptit.Hirex.service.impl;
 
-import java.util.Optional;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +33,12 @@ public class ResumeServiceImpl implements ResumeService {
 		resume.setEmployee(employee);
 
 		return resumeRepository.save(resume);
+	}
+
+	@Override
+	public List<Resume> getMyResumes(Long employeeId) {
+		List<Resume> listResumes = resumeRepository.findAllByEmployeeId(employeeId);
+		return listResumes;
 	}
 
 	@Override

@@ -25,7 +25,7 @@ public class WorkServiceImpl implements WorkService {
     @Override
     public Work validateAndGetWorkById(int id) {
         return getWorkById(id)
-                .orElseThrow(() -> new EntityNotFoundException("vcl"));
+                .orElseThrow(() -> new EntityNotFoundException("khong tim thay"));
     }
 
 }
