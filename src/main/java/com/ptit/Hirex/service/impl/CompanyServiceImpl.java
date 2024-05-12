@@ -24,7 +24,21 @@ public class CompanyServiceImpl implements CompanyService {
 		Company company = modelMapper.map(companyDTO, Company.class);
 		return companyRepository.save(company);
 	}
-
+	
+	@Override
+    public CompanyDTO getCompanyById(Long id) {
+        Optional<Company> company = companyRepository.findById(id);
+        if (company.isPresent()) {
+            return convertToDTO(company.get());
+        }
+        return null;
+    }
+    private CompanyDTO convertToDTO(Company company) {
+        CompanyDTO dto = new CompanyDTO();
+        dto.setImageBase64(company.getImageBase64());
+        return dto;
+    }
+    
 	@Override
 	public Company updateCompany(Long id, CompanyDTO companyDTO) {
 		Optional<Company> existingCompany = companyRepository.findById(id);

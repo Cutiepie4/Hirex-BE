@@ -13,9 +13,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ResumeDTO {
 
-	private Long id;
-	private String nameFile;
-	private String fileBase64;
-	private Long employerId; 
+	    private Long id;
+	    private String nameFile;
+	    private String fileBase64;
+	    private long size;
+	    private Long employerId; 
 	    
 }

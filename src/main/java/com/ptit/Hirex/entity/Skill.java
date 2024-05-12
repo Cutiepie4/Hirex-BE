@@ -16,28 +16,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "resume")
+@Table(name = "skill")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Resume extends BaseEntity {
+public class Skill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false)
-    private String nameFile;
+    private String name;
     
-    @Column(name = "image_base64", columnDefinition = "TEXT")
-    private String fileBase64;
-    
-    @Column(name = "size")
-    private Long size; 
+    @Column(name = "note")
+    private String note;
     
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
-
 }

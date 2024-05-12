@@ -41,6 +41,27 @@ public class FcmServiceImpl implements FCMService {
                               .setTitle(pnsRequest
                                   .getTitle())
                               .build())
+                      .putData("type", "VIDEO_CALL")
+                      .addAllTokens(
+                          user.getDeviceTokens()
+                              .stream()
+                              .map(DeviceToken::getDeviceToken)
+                              .collect(Collectors
+                                  .toList()))
+                      .build());
+        case INFO:
+          FirebaseMessaging
+              .getInstance()
+              .sendMulticast(
+                  MulticastMessage.builder()
+                      .setNotification(
+                          Notification.builder()
+                              .setBody(pnsRequest
+                                  .getContent())
+                              .setTitle(pnsRequest
+                                  .getTitle())
+                              .build())
+                      .putData("type", "INFO")
                       .addAllTokens(
                           user.getDeviceTokens()
                               .stream()

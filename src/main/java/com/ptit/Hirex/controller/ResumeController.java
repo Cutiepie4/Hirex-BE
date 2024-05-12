@@ -1,5 +1,6 @@
 package com.ptit.Hirex.controller;
 
+import java.io.IOException;
 import java.util.*;
 
 import com.ptit.Hirex.dtos.*;
@@ -13,8 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
-import java.util.Base64;
+
+import com.ptit.Hirex.dtos.ResumeDTO;
+import com.ptit.Hirex.service.impl.ResumeServiceImpl;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,9 @@ public class ResumeController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ResumeServiceImpl resumeServiceImpl;
 
     @Autowired
     private ResumeService resumeService;
@@ -54,13 +59,30 @@ public class ResumeController {
                 String fileName = file.getOriginalFilename();
                 // Convert file to base64
                 String base64Data = Base64.getEncoder().encodeToString(file.getBytes());
-                resumeService.uploadResume(fileName, base64Data, resumeDTO.getEmployerId());
+                
+                long fileSize = file.getSize(); 
+
+                resumeServiceImpl.uploadResume(fileName, base64Data, fileSize, resumeDTO.getEmployerId());
                 return ResponseEntity.ok("Resume uploaded successfully");
             } catch (IOException e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload resume");
             }
         } else {
             return ResponseEntity.badRequest().body("No file uploaded");
+        }
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteResume(@PathVariable("id") Long resumeId) {
+        try {
+            boolean deleted = resumeServiceImpl.deleteResume(resumeId);
+            if (deleted) {
+                return ResponseEntity.ok("Resume deleted successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resume not found");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete resume");
         }
     }
 }

@@ -22,36 +22,36 @@ import lombok.NoArgsConstructor;
 @Builder
 @Table(name = "company")
 public class Company {
-	   @Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Long id;
-	    
-	    @Column(name = "name")
-	    private String name;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-	    @Column(name = "short_name")
-	    private String shortName;
+	@Column(name = "name")
+	private String name;
 
-	    @Column(name = "description")
-	    private String description;
+	@Column(name = "short_name")
+	private String shortName;
 
-	    @Column(name = "employee_size")
-	    private int employeeSize;
-	    
-	    @Column(name = "head_office")
-	    private String headOffice;
-	    
-	    @Column(name = "industry")
-	    private String industry;
-	    
-	    @Column(name = "website")
-	    private String website;
-	    
-	    @Column(name = "image_base64", columnDefinition = "TEXT")
-	    private String imageBase64;
-	    
-	    @JsonIgnore
-	    @ManyToOne
-	    @JoinColumn(name = "employer_id")
-	    private Employer employer;
+	@Column(name = "description")
+	private String description;
+
+	@Column(name = "employee_size")
+	private int employeeSize;
+
+	@Column(name = "head_office")
+	private String headOffice;
+
+	@Column(name = "industry")
+	private String industry;
+
+	@Column(name = "website")
+	private String website;
+
+	@Column(name = "image_base64", columnDefinition = "TEXT")
+	private String imageBase64;
+
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "employer_id")
+	private Employer employer;
 }
