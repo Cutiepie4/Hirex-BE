@@ -22,10 +22,6 @@ public class NotificationController {
     private final NotificationService notificationService;
     private final ModelMapper modelMapper;
 
-    // public void createNotification() {
-
-    // }
-
     @GetMapping("")
     ResponseEntity<?> getNotifications(@AuthenticationPrincipal User currentUser) {
         List<NotificationReceiver> notifications = notificationService.getMyNotifications(currentUser.getId());

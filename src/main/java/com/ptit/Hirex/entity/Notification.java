@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "notification")
 @Entity
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
