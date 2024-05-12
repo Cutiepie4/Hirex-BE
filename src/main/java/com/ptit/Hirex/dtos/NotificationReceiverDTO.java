@@ -3,6 +3,7 @@ package com.ptit.Hirex.dtos;
 import java.util.*;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import lombok.*;
@@ -21,5 +22,5 @@ public class NotificationReceiverDTO {
     private String notificationContent;
     private String notificationCompanyDetail;
     private String notificationJobDetail;
-
+    private LocalDateTime createdAt;
 }

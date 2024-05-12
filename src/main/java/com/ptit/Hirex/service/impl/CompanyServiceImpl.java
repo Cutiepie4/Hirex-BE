@@ -2,13 +2,15 @@ package com.ptit.Hirex.service.impl;
 
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.ptit.Hirex.dtos.Company0DTO;
 import com.ptit.Hirex.dtos.CompanyDTO;
 import com.ptit.Hirex.entity.Company;
 import com.ptit.Hirex.repository.CompanyRepository;
 import com.ptit.Hirex.service.CompanyService;
-import org.modelmapper.ModelMapper;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -20,27 +22,27 @@ public class CompanyServiceImpl implements CompanyService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public Company saveCompany(CompanyDTO companyDTO) {
+	public Company saveCompany(Company0DTO companyDTO) {
 		Company company = modelMapper.map(companyDTO, Company.class);
 		return companyRepository.save(company);
 	}
 	
 	@Override
-    public CompanyDTO getCompanyById(Long id) {
+    public Company0DTO getCompanyById(Long id) {
         Optional<Company> company = companyRepository.findById(id);
         if (company.isPresent()) {
             return convertToDTO(company.get());
         }
         return null;
     }
-    private CompanyDTO convertToDTO(Company company) {
-        CompanyDTO dto = new CompanyDTO();
+    private Company0DTO convertToDTO(Company company) {
+        Company0DTO dto = new Company0DTO();
         dto.setImageBase64(company.getImageBase64());
         return dto;
     }
     
 	@Override
-	public Company updateCompany(Long id, CompanyDTO companyDTO) {
+	public Company updateCompany(Long id, Company0DTO companyDTO) {
 		Optional<Company> existingCompany = companyRepository.findById(id);
 		if (existingCompany.isPresent()) {
 			Company company = existingCompany.get();
