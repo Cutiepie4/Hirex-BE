@@ -1,5 +1,7 @@
 package com.ptit.Hirex.dtos;
 
+import com.ptit.Hirex.entity.BaseEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
