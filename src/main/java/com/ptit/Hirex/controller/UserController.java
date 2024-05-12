@@ -52,7 +52,19 @@ public class UserController {
 	    }
 	}
 
-	
+	@GetMapping("/by-phone")
+	public ResponseEntity<?> getUserByPhoneNumber(@RequestParam("phoneNumber") String phoneNumber) {
+	    try {
+	        User user = userServiceImpl.findByPhoneNumber(phoneNumber);
+	        if (user == null) {
+	            return ResponseEntity.notFound().build();
+	        }
+	        return ResponseEntity.ok(user.getFullName());
+	    } catch (Exception e) {
+	        return ResponseEntity.badRequest().body("Error retrieving user by phone number: " + e.getMessage());
+	    }
+	}
+
 	@PostMapping("/register")
 	public ResponseEntity<RegisterResponse> createUser(@Validated @RequestBody UserDTO userDTO, BindingResult result) {
 

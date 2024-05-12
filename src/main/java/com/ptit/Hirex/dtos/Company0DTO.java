@@ -1,7 +1,5 @@
 package com.ptit.Hirex.dtos;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,5 +21,4 @@ public class Company0DTO {
     private String imageBase64;
     private Long employerId; 
     
-    private MultipartFile file;
 }
