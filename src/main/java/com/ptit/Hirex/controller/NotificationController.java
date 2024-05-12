@@ -26,7 +26,7 @@ public class NotificationController {
     ResponseEntity<?> getNotifications(@AuthenticationPrincipal User currentUser) {
         List<NotificationReceiver> notifications = notificationService.getMyNotifications(currentUser.getId());
         List<NotificationReceiverDTO> notificationDTOs = notifications.stream()
-                .map(notification -> modelMapper.map(notification, NotificationReceiverDTO.class))
+                .map(notification -> modelMapper.map(notification.getNotification(), NotificationReceiverDTO.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(notificationDTOs);
     }
