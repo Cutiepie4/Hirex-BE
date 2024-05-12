@@ -25,6 +25,8 @@ public class Work {
 
     private String address;
 
+    private String description;
+
     private LocalTime startTime;
 
     private LocalTime endTime;
@@ -54,9 +56,8 @@ public class Work {
     private Expert expert;
 
     @ManyToOne
-    @JoinColumn(name = "employer_id", referencedColumnName = "id")
-    private Employer employer;
-    // ditme sai cu r
+    @JoinColumn(name = "company_id", referencedColumnName = "id")
+    private Company company;
 
     @ManyToMany
     @JoinTable(
@@ -65,6 +66,9 @@ public class Work {
         inverseJoinColumns = @JoinColumn(name = "employee_id")
     )
     private List<Employee> employees;
+
+    @OneToMany(mappedBy = "work", cascade = CascadeType.ALL)
+    private List<ResumeWork> resumeWorks;
 
     @CreatedDate
     private Instant createOn;

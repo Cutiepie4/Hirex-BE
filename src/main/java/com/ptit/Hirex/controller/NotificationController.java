@@ -1,16 +1,38 @@
 package com.ptit.Hirex.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import com.ptit.Hirex.service.NotificationService;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import com.ptit.Hirex.dtos.*;
+import com.ptit.Hirex.entity.*;
+import com.ptit.Hirex.service.*;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequestMapping("${api.prefix}/notifications")
+@RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class NotificationController {
-    @Autowired
-    NotificationService notificationService;
+    private final NotificationService notificationService;
+    private final ModelMapper modelMapper;
 
-    public void createNotification() {
+    // public void createNotification() {
 
+    // }
+
+    @GetMapping("")
+    ResponseEntity<?> getNotifications(@AuthenticationPrincipal User currentUser) {
+        List<NotificationReceiver> notifications = notificationService.getMyNotifications(currentUser.getId());
+        List<NotificationReceiverDTO> notificationDTOs = notifications.stream()
+                .map(notification -> modelMapper.map(notification, NotificationReceiverDTO.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(notificationDTOs);
     }
+
 }

@@ -22,16 +22,12 @@ public class Appreciation extends BaseEntity {
     private String endDate;
     private String description;
     
-     @ManyToOne
-     @JoinColumn(name = "company_id", referencedColumnName = "id")
-     private Company company;
+    @ManyToOne
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")
+    private Employee employee;
     
-     @ManyToOne
-     @JoinColumn(name = "employee_id", referencedColumnName = "id")
-     private Employee employee;
-     
-    // @ManyToOne
-    // @JoinColumn(name = "work_id", referencedColumnName = "id")
-    // private Work work;
+    @ManyToOne
+    @JoinColumn(name = "company_id", referencedColumnName = "id")
+    private Company company;
     
 }

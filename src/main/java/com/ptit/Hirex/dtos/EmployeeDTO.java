@@ -1,8 +1,5 @@
 package com.ptit.Hirex.dtos;
 
-import java.util.List;
-
-import com.ptit.Hirex.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,5 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class EmployeeDTO {
 
-    private String about; 
+    private Long id;
+    private String about;
+    private UserDTO user;
+
 }
