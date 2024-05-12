@@ -1,6 +1,7 @@
 package com.ptit.Hirex.controller;
 
 import java.util.Base64;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,12 +22,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ptit.Hirex.dtos.CompanyDTO;
 import com.ptit.Hirex.entity.Company;
+import com.ptit.Hirex.repository.CompanyRepository;
 import com.ptit.Hirex.service.CompanyService;
 
 @RestController
 @RequestMapping("${api.prefix}/companies")
 @CrossOrigin(origins = "*")
 public class CompanyController {
+	
+	@Autowired
+	private CompanyRepository companyRepository;
 
     @Autowired
     private CompanyService companyService;
@@ -56,5 +62,10 @@ public class CompanyController {
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
         companyService.deleteCompany(id);
         return ResponseEntity.ok().build();
+    }
+    
+    @GetMapping("/all-company")
+    public List<Company> allCompany(){
+    	return companyRepository.findAll();
     }
 }

@@ -17,10 +17,4 @@ public class Ability {
     private int id;
 
     private String name;
-
-    @ManyToMany(mappedBy = "requiredAbilities")
-    private List<Work> requiredWork;
-
-    @ManyToMany(mappedBy = "optionalAbilities")
-    private List<Work> optionalWork;
 }

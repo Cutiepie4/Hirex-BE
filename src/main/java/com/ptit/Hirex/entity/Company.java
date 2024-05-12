@@ -1,14 +1,20 @@
 package com.ptit.Hirex.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Table(name = "company")
 public class Company {
-	   @Id
+	   	@Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private Long id;
 	    
@@ -54,4 +60,8 @@ public class Company {
 	    @ManyToOne
 	    @JoinColumn(name = "employer_id")
 	    private Employer employer;
+	    
+	    @JsonIgnore
+	    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	    private List<Work> work = new ArrayList<>();
 }
