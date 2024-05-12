@@ -48,7 +48,7 @@ public class CompanyController {
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createCompany(@ModelAttribute CompanyDTO companyDTO, @RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
      
-    	System.out.print(companyDTO);
+    	System.out.print(companyDTO.getEmployeeSize());
     	if (image != null && !image.isEmpty()) {
             byte[] imageBytes = image.getBytes();
             String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
