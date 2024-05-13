@@ -19,7 +19,7 @@ public class NotificationReceiverDTO {
     private boolean read;
     private String notificationTitle;
     private String notificationContent;
-    private String notificationCompanyDetail;
-    private String notificationJobDetail;
+    private List<String> notificationCompanyDetail;
+    private List<String> notificationJobDetail;
 
 }
