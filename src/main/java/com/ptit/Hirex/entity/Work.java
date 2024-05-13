@@ -45,6 +45,8 @@ public class Work {
     private String jobLocation;
     
     private String typeJob;
+    
+    private String specialize;
   
     @ManyToOne
     @JoinColumn(name = "company_id", referencedColumnName = "id")

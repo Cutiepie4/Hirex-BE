@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import com.ptit.Hirex.entity.Company;
 import com.ptit.Hirex.entity.Work;
 import com.ptit.Hirex.repository.CompanyRepository;
 import com.ptit.Hirex.repository.EmployerRepository;
+import com.ptit.Hirex.repository.SaveWorkRepository;
 import com.ptit.Hirex.repository.WorkRepository;
 
 @RestController
@@ -37,6 +39,9 @@ public class WorkController {
 	
 	@Autowired
 	private EmployerRepository employerRepository;
+	
+	@Autowired
+	private SaveWorkRepository saveWorkRepository;
 	
 	@GetMapping("/all-work")
     public List<Work> allWork() {
@@ -59,10 +64,11 @@ public class WorkController {
 	public Work convert(WorkDTO workDTO) {
 		java.util.Date utilDate = java.util.Calendar.getInstance().getTime();
 		Date sqlDate = new Date(utilDate.getTime());
-		System.out.println(workDTO.getCompanyId() + " " + workDTO.getEmployerId());
+		System.out.println(workDTO.getCompanyId() + " " + workDTO.getEmployerId() + " " + workDTO.getEndTime());
 		Date endTime = convertToSqlDate(workDTO.getEndTime());
 		
 	    return Work.builder()
+	    		.specialize(workDTO.getSpecialize())
 	            .jobPosition(workDTO.getJobPosition())
 	            .wage(workDTO.getWage())
 	            .typeWork(workDTO.getTypeWork())
@@ -83,23 +89,50 @@ public class WorkController {
             return null;
         }
         return new Date(utilDate.getTime());
-    }
+	}
+	
 	
 	@GetMapping("/search-work")
 	public List<Work> searchWork(@RequestParam(required = false) String jobPosition,
 	                             @RequestParam(required = false) String typeWork,
 	                             @RequestParam(required = false) String jobLocation,
 	                             @RequestParam(required = false) String typeJob,
+	                             @RequestParam(required = false) String specialize,
 	                             @RequestParam(required = false) Long minWage,
 	                             @RequestParam(required = false) Long maxWage){
+		
+		System.out.println(jobPosition + "a" + typeWork + "b" + jobLocation
+				+ "f" + typeJob + "e" + specialize + "d" + minWage + "c" + maxWage
+		);
 	    
-	    if (jobPosition == null && typeWork == null && jobLocation == null && typeJob == null && minWage == null && maxWage == null) {
+	    if (jobPosition == null && typeWork == null && specialize == null && jobLocation == null && typeJob == null && minWage == null && maxWage == null) {
 	        return workRepository.findAll();
 	    } else {
-	    	return workRepository.findByJobPositionContainingAndTypeWorkContainingAndJobLocationContainingAndTypeJobContainingAndWageBetween(
-	                jobPosition, typeWork, jobLocation, typeJob, minWage, maxWage);
+	    	return workRepository.findByJobPositionContainingAndSpecializeContainingAndTypeWorkContainingAndJobLocationContainingAndTypeJobContainingAndWageBetween(
+	                jobPosition, specialize, typeWork, jobLocation, typeJob, minWage, maxWage);
 	    }
 	}
 
-
+	@GetMapping("/type-specialize")
+	public List<String> typeWork(){
+		return workRepository.findBySpecializeDistinct();
+	}
+	
+	@GetMapping("/quantity-specialize")
+	public int quantity(@RequestParam(required = false) String specialize){
+		return workRepository.countBySpecialize(specialize);
+	}
+	
+	@GetMapping("/top3saved")
+	public List<Work> top3saved(){
+		List<Integer> workId = saveWorkRepository.findTop3MostFrequentWorkIds();
+		System.out.println(workId);
+		
+		List<Work> works = new ArrayList<Work>();
+		for(Integer x : workId) {
+			Work ans = workRepository.findById(x).orElse(null);
+			works.add(ans);
+		}
+		return works;
+	}
 }

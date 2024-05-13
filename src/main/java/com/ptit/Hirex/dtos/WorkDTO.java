@@ -22,4 +22,5 @@ public class WorkDTO {
     private Long wage;
     private Date startTime;
     private Date endTime;
+    private String specialize;
 }
