@@ -1,12 +1,18 @@
 package com.ptit.Hirex.service.impl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.MulticastMessage;
 import com.google.firebase.messaging.Notification;
 import com.ptit.Hirex.entity.DeviceToken;
@@ -28,28 +34,35 @@ public class FcmServiceImpl implements FCMService {
   public void pushNotification(PnsRequest pnsRequest) throws FirebaseMessagingException {
     User user = userService.findByPhoneNumber(pnsRequest.getPhoneNumber());
     if (user != null) {
+      Notification notification = Notification
+          .builder()
+          .setTitle(pnsRequest.getTitle())
+          .setBody(pnsRequest.getContent())
+          .build();
+      List<String> tokenList = user.getDeviceTokens()
+                                  .stream()
+                                  .map(DeviceToken::getDeviceToken)
+                                  .collect(Collectors.toList());
+      Map<String, String> data = new HashMap<>();
       switch (pnsRequest.getType()) {
         case VIDEO_CALL:
+          data.put("notificationType", "videoCall");
           FirebaseMessaging
               .getInstance()
               .sendMulticast(
                   MulticastMessage.builder()
-                      .setNotification(
-                          Notification.builder()
-                              .setBody(pnsRequest
-                                  .getContent())
-                              .setTitle(pnsRequest
-                                  .getTitle())
-                              .build())
-                      .addAllTokens(
-                          user.getDeviceTokens()
-                              .stream()
-                              .map(DeviceToken::getDeviceToken)
-                              .collect(Collectors
-                                  .toList()))
+                      .setNotification(notification)
+                      .addAllTokens(tokenList)
+                      .putAllData(data)
                       .build());
           break;
-
+        case SCHEDULE_NOTIFICATION:
+          FirebaseMessaging.getInstance()
+              .sendMulticast(MulticastMessage.builder()
+                  .setNotification(notification)
+                  .addAllTokens(tokenList)
+                  .build());
+          break;
         default:
           break;
       }
@@ -73,4 +86,15 @@ public class FcmServiceImpl implements FCMService {
     }
     return true;
   }
+  // @Scheduled(fixedDelay = 60000)
+  // public void checkAndSendNotifications() {
+  // LocalDateTime now = LocalDateTime.now();
+  // List<Item> itemsToNotify = itemRepository.findItemsToNotify(now);
+  // for (Item item : itemsToNotify) {
+  // // Gửi thông báo cho mỗi item thõa mãn điều kiện
+  // notificationService.sendNotification(item.getUserToken(), "Thông báo", "Sự
+  // kiện của bạn sắp diễn ra!");
+  // // Cập nhật trạng thái của item nếu cần
+  // }
+  // }
 }

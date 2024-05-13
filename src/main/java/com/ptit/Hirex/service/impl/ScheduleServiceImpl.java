@@ -3,6 +3,7 @@ package com.ptit.Hirex.service.impl;
 import com.ptit.Hirex.dtos.SchedulesDTO;
 import com.ptit.Hirex.entity.Items;
 import com.ptit.Hirex.entity.Schedule;
+import com.ptit.Hirex.entity.User;
 import com.ptit.Hirex.repository.ItemsRepository;
 import com.ptit.Hirex.repository.ScheduleRepository;
 import com.ptit.Hirex.repository.UserRepository;
@@ -35,13 +36,15 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Schedule createSchedule(SchedulesDTO schedulesDTO) {
+    public Schedule createSchedule(String phoneNumber ,SchedulesDTO schedulesDTO) {
         validateScheduleDTO(schedulesDTO);
+        User user = userRepository.findByPhoneNumber(phoneNumber).get();
         Schedule schedule = scheduleRepository.findByDate(schedulesDTO.getDate());
         if (schedule == null) {
             schedule = new Schedule();
             schedule.setDate(schedulesDTO.getDate());
             schedule.setItems(new ArrayList<>());
+            schedule.setUser(user);
             schedule = scheduleRepository.save(schedule);
         }
         Items item = schedulesDTO.getItems();
@@ -66,6 +69,8 @@ public class ScheduleServiceImpl implements ScheduleService {
         item.setTitle(scheduleItemDetails.getTitle());
         item.setType(scheduleItemDetails.getType());
         item.setNotes(scheduleItemDetails.getNotes());
+        item.setNotification(scheduleItemDetails.getNotification());
+        item.setType_notif(scheduleItemDetails.getType_notif());
         return item;
     }
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ScheduleService {
     List<Schedule> getSchedulesByUserId(String phoneNumber) throws Exception;
-    Schedule createSchedule(SchedulesDTO schedulesDTO) throws Exception;
+    Schedule createSchedule(String phoneNumber, SchedulesDTO schedulesDTO) throws Exception;
     Items updateSchedule(int id,SchedulesDTO schedulesDTO) throws Exception;
     boolean deleteSchedule(int id) throws Exception;
     

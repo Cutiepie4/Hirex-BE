@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -28,6 +31,7 @@ public class LeaveReason {
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "items_id", referencedColumnName = "id")
     private Items items;

@@ -37,10 +37,10 @@ public class ScheduleController {
         }
     }
 
-    @PostMapping("/schedules")
-    public ResponseEntity<?> createSchedule(@RequestBody SchedulesDTO schedulesDTO) {
+    @PostMapping("/schedules/{phoneNumber}")
+    public ResponseEntity<?> createSchedule(@PathVariable String phoneNumber ,@RequestBody SchedulesDTO schedulesDTO) {
         try {
-            Schedule newSchedule = scheduleServiceImpl.createSchedule(schedulesDTO);
+            Schedule newSchedule = scheduleServiceImpl.createSchedule(phoneNumber ,schedulesDTO);
             return ResponseEntity.ok(newSchedule);
         } catch (IllegalArgumentException e) {
             System.out.println("kfds" + e.getMessage());

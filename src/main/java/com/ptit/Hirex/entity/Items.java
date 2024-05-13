@@ -5,7 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,11 +28,13 @@ public class Items {
     private String title;
     private String type;
     private String notes;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime notification;
+    private String type_notif;
 
     
     @ManyToOne
     @JoinColumn(name = "schedule_id", referencedColumnName = "id")
     @JsonBackReference
     private Schedule schedule;
-
 }
