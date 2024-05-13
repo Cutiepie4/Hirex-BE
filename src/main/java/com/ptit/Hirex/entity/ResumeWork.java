@@ -20,6 +20,7 @@ public class ResumeWork extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ResumeStatus status;
     
+    @Column(name = "information", columnDefinition = "TEXT")
     private String information;
 
     @ManyToOne

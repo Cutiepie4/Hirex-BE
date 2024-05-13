@@ -11,12 +11,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AppreciationRequest {
 
+    private Long id;
     private String award;
-    private String achieve;
+    private String achievement;
     private String endDate;
     private String description;
 
     private Long employeeId;
-    private Long companyId;
+    private Long workId;
 
 }

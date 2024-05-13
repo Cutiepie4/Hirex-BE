@@ -4,15 +4,14 @@ import java.util.*;
 
 import com.ptit.Hirex.dtos.*;
 import com.ptit.Hirex.entity.Appreciation;
+import com.ptit.Hirex.entity.Employee;
+import com.ptit.Hirex.entity.Work;
 
 
 public interface AppreciationService {
 
 	Appreciation saveAppreciation(AppreciationRequest appreciationRequest);
 
-	Optional<Appreciation> getAppreciationById(Long id);
-	
-	Appreciation validateAndGetAppreciationById(Long id);
-
+	Appreciation getAppreciationByEmployeeAndWork(Employee employee, Work work);
 
 }
