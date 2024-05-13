@@ -36,7 +36,7 @@ public class NotificationController {
         }
     }
 
-    @PostMapping("{id}/read")
+    @PostMapping("/read/{id}")
     ResponseEntity<?> markRead(@PathVariable String id) {
         try {
             NotificationReceiver notification = notificationService.markRead(Long.valueOf(id));
@@ -47,11 +47,12 @@ public class NotificationController {
         }
     }
 
-    @PostMapping("{id}/readall")
+    @PostMapping("/read-all")
     ResponseEntity<?> markReadAll(@AuthenticationPrincipal User currentUser) {
         try {
-            List<NotificationReceiver> notification = notificationService.markReadAll(Long.valueOf(currentUser.getId()));
-            
+            List<NotificationReceiver> notification = notificationService
+                    .markReadAll(Long.valueOf(currentUser.getId()));
+
             return ResponseEntity.ok("Thành công");
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Lỗi server");
