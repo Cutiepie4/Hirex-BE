@@ -21,6 +21,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public Employee getEmployee(Long userId) {
 		return employeeRepository.findByUserId(userId).orElseGet(() -> save(userId));
 	}
+
+    @Override
+    public Employee getEmployeeById(Long id) {
+        return employeeRepository.findById(id).orElse(null);
+    }
+
 	
     @Override
     public Employee save(Long userId) {

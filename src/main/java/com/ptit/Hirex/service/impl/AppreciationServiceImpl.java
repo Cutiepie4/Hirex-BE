@@ -19,27 +19,17 @@ import lombok.RequiredArgsConstructor;
 public class AppreciationServiceImpl implements AppreciationService {
 
     private final AppreciationRepository appreciationRepository;
-    private final WorkRepository workRepository;
-    private final EmployeeService employeeService;
-    private final ResumeService resumeService;
     private final ModelMapper modelMapper;
 
     @Override
     public Appreciation saveAppreciation(AppreciationRequest appreciationRequest) {
         Appreciation appreciation = modelMapper.map(appreciationRequest, Appreciation.class);
-        return appreciation;
-        // return appreciationRepository.save(appreciation);
+        return appreciationRepository.save(appreciation);
     }
 
     @Override
-    public Optional<Appreciation> getAppreciationById(Long id) {
-        return appreciationRepository.findById(id);
-    }
-
-    @Override
-    public Appreciation validateAndGetAppreciationById(Long id) {
-        return getAppreciationById(id)
-                .orElseThrow(() -> new EntityNotFoundException("khong tim thay"));
+	public Appreciation getAppreciationByEmployeeAndWork(Employee employee, Work work) {
+        return appreciationRepository.findOneByEmployeeAndWork(employee, work);
     }
 
 }

@@ -20,6 +20,8 @@ public class Appreciation extends BaseEntity {
     private String award;
     private String achievement;
     private String endDate;
+    
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
     
     @ManyToOne
@@ -27,7 +29,7 @@ public class Appreciation extends BaseEntity {
     private Employee employee;
     
     @ManyToOne
-    @JoinColumn(name = "company_id", referencedColumnName = "id")
-    private Company company;
+    @JoinColumn(name = "work_id", referencedColumnName = "id")
+    private Work work;
     
 }

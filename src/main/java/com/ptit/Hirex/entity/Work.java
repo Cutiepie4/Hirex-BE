@@ -25,6 +25,7 @@ public class Work {
 
     private String address;
 
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     private LocalTime startTime;

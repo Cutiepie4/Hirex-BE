@@ -13,4 +13,6 @@ public interface EmployeeService {
 	Employee save(Long idUser);
 
     Employee getEmployee(Long userId);
+
+    Employee getEmployeeById(Long id);
 }
