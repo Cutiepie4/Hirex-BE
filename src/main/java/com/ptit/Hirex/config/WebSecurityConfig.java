@@ -71,7 +71,7 @@ public class WebSecurityConfig {
                           .requestMatchers(POST, String.format("%s/companies/creatework", apiPrefix)).permitAll()
                           .requestMatchers(GET, String.format("%s/companies/specialize", apiPrefix)).permitAll()
                           .requestMatchers(GET, String.format("%s/companies/top3saved", apiPrefix)).permitAll()
-
+                          .requestMatchers(GET, String.format("%s/companies/all-company", apiPrefix)).permitAll()
                           
                           .anyRequest().authenticated();
                 })

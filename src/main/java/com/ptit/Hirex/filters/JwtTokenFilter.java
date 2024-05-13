@@ -97,7 +97,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 				Pair.of(String.format("%s/companies/all-work", apiPrefix), "GET"),
 				Pair.of(String.format("%s/companies/creatework", apiPrefix), "POST"),
 				Pair.of(String.format("%s/companies/specialize", apiPrefix), "GET"),
-				Pair.of(String.format("%s/companies/top3saved", apiPrefix), "GET")
+				Pair.of(String.format("%s/companies/top3saved", apiPrefix), "GET"),
+				Pair.of(String.format("%s/companies/all-company", apiPrefix), "GET")
 
 		);
 		for (Pair<String, String> bypassToken : bypassTokens) {

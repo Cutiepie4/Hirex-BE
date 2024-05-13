@@ -66,6 +66,12 @@ public class CompanyController {
     
     @GetMapping("/all-company")
     public List<Company> allCompany(){
-    	return companyRepository.findAll();
+    	try {
+    		return companyRepository.findAll();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
     }
 }
