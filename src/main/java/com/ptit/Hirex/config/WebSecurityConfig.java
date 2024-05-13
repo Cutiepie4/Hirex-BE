@@ -42,8 +42,8 @@ public class WebSecurityConfig {
                                     String.format("%s/users/uploadImage", apiPrefix),
                                     String.format("%s/users/**", apiPrefix),
                                     String.format("%s/works/**", apiPrefix),
-                                    String.format("%s/users/updateUser", apiPrefix)
-
+                                    String.format("%s/users/updateUser", apiPrefix),
+                                    String.format("%s/users/by-phone", apiPrefix)
                             )
                             .permitAll()
 //                            .requestMatchers(GET, "/test")

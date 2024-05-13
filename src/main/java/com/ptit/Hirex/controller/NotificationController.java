@@ -23,15 +23,11 @@ public class NotificationController {
     private final NotificationService notificationService;
     private final ModelMapper modelMapper;
 
-    // public void createNotification() {
-
-    // }
-
     @GetMapping("")
     ResponseEntity<?> getNotifications(@AuthenticationPrincipal User currentUser) {
         List<NotificationReceiver> notifications = notificationService.getMyNotifications(currentUser.getId());
         List<NotificationReceiverDTO> notificationDTOs = notifications.stream()
-                .map(notification -> modelMapper.map(notification, NotificationReceiverDTO.class))
+                .map(notification -> modelMapper.map(notification.getNotification(), NotificationReceiverDTO.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(notificationDTOs);
     }

@@ -151,7 +151,7 @@ public class UserServiceImpl implements UserService {
 
 		// Kiểm tra mật khẩu cũ
 		if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-			throw new BadCredentialsException("Incorrect old password");
+			throw new BadCredentialsException("Mật khẩu cũ không chính xác");
 		}
 
 		// Kiểm tra và cập nhật mật khẩu mới
@@ -166,37 +166,36 @@ public class UserServiceImpl implements UserService {
 			throw new IllegalArgumentException("New password must be different from old password");
 		}
 	}
-	
+
 	public User updateUser(UserUpdateDTO userUpdateDTO) throws Exception {
-	    String fullName = userUpdateDTO.getFullName();
-	    String address = userUpdateDTO.getAddress();
-	    String mail = userUpdateDTO.getMail();
-	    String dateOfBirth = userUpdateDTO.getDateOfBirth();
+		String fullName = userUpdateDTO.getFullName();
+		String address = userUpdateDTO.getAddress();
+		String mail = userUpdateDTO.getMail();
+		String dateOfBirth = userUpdateDTO.getDateOfBirth();
 
 		Optional<User> optionalUser = userRepository.findByPhoneNumber(userUpdateDTO.getPhoneNumber());
-		
+
 		if (optionalUser.isEmpty()) {
 			throw new DataNotFoundException("User not found");
 		}
 		User user = optionalUser.get();
 
+		if (fullName != null) {
+			user.setFullName(fullName);
+		}
+		if (address != null) {
+			user.setAddress(address);
+		}
+		if (mail != null) {
+			user.setMail(mail);
+		}
+		if (dateOfBirth != null) {
+			user.setDateOfBirth(dateOfBirth);
+		}
 
-	    if (fullName != null) {
-	        user.setFullName(fullName);
-	    }
-	    if (address != null) {
-	        user.setAddress(address);
-	    }
-	    if (mail != null) {
-	        user.setMail(mail);
-	    }
-	    if (dateOfBirth != null) {
-	        user.setDateOfBirth(dateOfBirth);
-	    }
+		User updatedUser = userRepository.save(user);
 
-	    User updatedUser = userRepository.save(user);
-
-	    return updatedUser;
+		return updatedUser;
 	}
 
 }
