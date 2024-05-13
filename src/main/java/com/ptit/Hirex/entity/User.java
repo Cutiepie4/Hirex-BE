@@ -61,6 +61,9 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "mail")
     private String mail;
     
+    @Column(name = "gender")
+    private String gender;
+    
     @Column(name = "image_base64", columnDefinition = "TEXT")
     private String imageBase64;
 
