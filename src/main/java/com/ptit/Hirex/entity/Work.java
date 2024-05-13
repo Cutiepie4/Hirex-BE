@@ -35,6 +35,14 @@ public class Work {
 
     private LocalDate endDate;
 
+    private String jobPosition;
+    
+	private String typeWork;
+    
+    private String typeJob;
+
+    private Long wage;
+
     @ManyToMany
     @JoinTable(
             name = "work_required_ability",

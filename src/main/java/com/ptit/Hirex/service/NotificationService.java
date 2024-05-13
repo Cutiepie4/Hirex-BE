@@ -20,4 +20,5 @@ public interface NotificationService {
 
     NotificationReceiver markRead(Long id);
 
+    List<NotificationReceiver> markReadAll(Long userId);
 }

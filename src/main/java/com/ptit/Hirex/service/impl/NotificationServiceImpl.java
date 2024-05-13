@@ -59,4 +59,12 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationReceiverRepository.save(notificationReceiver);
     }
 
+    @Override
+    public List<NotificationReceiver> markReadAll(Long userId) {
+        List<NotificationReceiver> notificationReceivers = getMyNotifications(userId);
+        for (NotificationReceiver notificationReceiver : notificationReceivers)
+            notificationReceiver.setRead(true);
+        return notificationReceiverRepository.saveAll(notificationReceivers);
+    }
+
 }

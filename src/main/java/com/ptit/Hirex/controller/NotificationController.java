@@ -25,18 +25,37 @@ public class NotificationController {
 
     @GetMapping("")
     ResponseEntity<?> getNotifications(@AuthenticationPrincipal User currentUser) {
-        List<NotificationReceiver> notifications = notificationService.getMyNotifications(currentUser.getId());
-        List<NotificationReceiverDTO> notificationDTOs = notifications.stream()
-                .map(notification -> modelMapper.map(notification.getNotification(), NotificationReceiverDTO.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(notificationDTOs);
+        try {
+            List<NotificationReceiver> notifications = notificationService.getMyNotifications(currentUser.getId());
+            List<NotificationReceiverDTO> notificationDTOs = notifications.stream()
+                    .map(notification -> modelMapper.map(notification.getNotification(), NotificationReceiverDTO.class))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(notificationDTOs);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi server");
+        }
     }
 
     @PostMapping("{id}/read")
     ResponseEntity<?> markRead(@PathVariable String id) {
-        NotificationReceiver notification = notificationService.markRead(Long.valueOf(id));
-        NotificationReceiverDTO notificationDTO = modelMapper.map(notification, NotificationReceiverDTO.class);
-        return ResponseEntity.ok(notificationDTO);
+        try {
+            NotificationReceiver notification = notificationService.markRead(Long.valueOf(id));
+            NotificationReceiverDTO notificationDTO = modelMapper.map(notification, NotificationReceiverDTO.class);
+            return ResponseEntity.ok(notificationDTO);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi server");
+        }
+    }
+
+    @PostMapping("{id}/readall")
+    ResponseEntity<?> markReadAll(@AuthenticationPrincipal User currentUser) {
+        try {
+            List<NotificationReceiver> notification = notificationService.markReadAll(Long.valueOf(currentUser.getId()));
+            
+            return ResponseEntity.ok("Thành công");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi server");
+        }
     }
 
 }

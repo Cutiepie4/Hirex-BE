@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ptit.Hirex.dtos.NotificationRequest;
