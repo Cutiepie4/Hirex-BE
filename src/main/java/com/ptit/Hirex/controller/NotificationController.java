@@ -12,6 +12,7 @@ import com.ptit.Hirex.dtos.*;
 import com.ptit.Hirex.entity.*;
 import com.ptit.Hirex.service.*;
 
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -29,6 +30,13 @@ public class NotificationController {
                 .map(notification -> modelMapper.map(notification.getNotification(), NotificationReceiverDTO.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(notificationDTOs);
+    }
+
+    @PostMapping("{id}/read")
+    ResponseEntity<?> markRead(@PathVariable String id) {
+        NotificationReceiver notification = notificationService.markRead(Long.valueOf(id));
+        NotificationReceiverDTO notificationDTO = modelMapper.map(notification, NotificationReceiverDTO.class);
+        return ResponseEntity.ok(notificationDTO);
     }
 
 }
