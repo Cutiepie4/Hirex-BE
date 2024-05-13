@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ptit.Hirex.dtos.UpdatePasswordDTO;
 import com.ptit.Hirex.dtos.UserDTO;
+import com.ptit.Hirex.dtos.UserDisplayDto;
 import com.ptit.Hirex.dtos.UserLoginDTO;
 import com.ptit.Hirex.dtos.UserUpdateDTO;
 import com.ptit.Hirex.entity.User;
@@ -38,31 +39,30 @@ public class UserController {
 
 	private final UserServiceImpl userServiceImpl;
 
-	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getUserById(@PathVariable Long id) {
-	    try {
-	        User user = userServiceImpl.findById(id);
-	        if (user == null) {
-	            return ResponseEntity.notFound().build();
-	        }
-	        return ResponseEntity.ok(user);
-	    } catch (Exception e) {
-	        return ResponseEntity.badRequest().body("Error retrieving user: " + e.getMessage());
-	    }
+		try {
+			User user = userServiceImpl.findById(id);
+			if (user == null) {
+				return ResponseEntity.notFound().build();
+			}
+			return ResponseEntity.ok(user);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body("Error retrieving user: " + e.getMessage());
+		}
 	}
 
 	@GetMapping("/by-phone")
 	public ResponseEntity<?> getUserByPhoneNumber(@RequestParam("phoneNumber") String phoneNumber) {
-	    try {
-	        User user = userServiceImpl.findByPhoneNumber(phoneNumber);
-	        if (user == null) {
-	            return ResponseEntity.notFound().build();
-	        }
-	        return ResponseEntity.ok(user.getFullName());
-	    } catch (Exception e) {
-	        return ResponseEntity.badRequest().body("Error retrieving user by phone number: " + e.getMessage());
-	    }
+		try {
+			User user = userServiceImpl.findByPhoneNumber(phoneNumber);
+			if (user == null) {
+				return ResponseEntity.notFound().build();
+			}
+			return ResponseEntity.ok(new UserDisplayDto(user.getFullName(), user.getImageBase64()));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body("Error retrieving user by phone number: " + e.getMessage());
+		}
 	}
 
 	@PostMapping("/register")
@@ -109,29 +109,28 @@ public class UserController {
 
 	@PostMapping("/uploadImage")
 	public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile image,
-	        @RequestParam("phoneNumber") String phoneNumber) {
-	    try {
+			@RequestParam("phoneNumber") String phoneNumber) {
+		try {
 
-	        User user = userServiceImpl.findByPhoneNumber(phoneNumber);
+			User user = userServiceImpl.findByPhoneNumber(phoneNumber);
 
-	        if (user == null) {
-	            return ResponseEntity.badRequest().body("User not found");
-	        }
+			if (user == null) {
+				return ResponseEntity.badRequest().body("User not found");
+			}
 
-	        System.out.println("User found: " + user.getFullName()); 
+			System.out.println("User found: " + user.getFullName());
 
-	        String imageBase64 = Base64.getEncoder().encodeToString(image.getBytes());
+			String imageBase64 = Base64.getEncoder().encodeToString(image.getBytes());
 
-	        user.setImageBase64(imageBase64);
+			user.setImageBase64(imageBase64);
 
-	        userServiceImpl.saveUser(user);
+			userServiceImpl.saveUser(user);
 
-	        return ResponseEntity.ok("Image uploaded successfully for user: " + user.getFullName());
-	    } catch (Exception e) {
-	        return ResponseEntity.badRequest().body("Error uploading image: " + e.getMessage());
-	    }
+			return ResponseEntity.ok("Image uploaded successfully for user: " + user.getFullName());
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body("Error uploading image: " + e.getMessage());
+		}
 	}
-
 
 	@PutMapping("/updatePassword")
 	public ResponseEntity<?> updatePassword(@Validated @RequestBody UpdatePasswordDTO updatePasswordDTO) {
@@ -145,12 +144,12 @@ public class UserController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
-	
+
 	@PutMapping("/updateUser")
 	public ResponseEntity<?> updateUser(@Validated @RequestBody UserUpdateDTO userUpdateDTO) {
 		try {
 			User updatedUser = userServiceImpl.updateUser(userUpdateDTO);
-			
+
 			return ResponseEntity.ok("Password updated successfully for user: " + userUpdateDTO.getFullName());
 		} catch (Exception e) {
 			// Xử lý lỗi nếu có

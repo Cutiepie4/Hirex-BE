@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ResumeWorkRepository extends JpaRepository<ResumeWork, Long> {
     List<ResumeWork> findAllByWorkIdOrderByCreatedAtDesc(int workId);
+    boolean existsByResumeAndWork(Resume resume, Work work);
 }

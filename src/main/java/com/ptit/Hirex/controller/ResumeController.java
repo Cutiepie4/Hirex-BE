@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ptit.Hirex.dtos.ResumeDTO;
 import com.ptit.Hirex.service.impl.ResumeServiceImpl;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @RestController
@@ -42,14 +41,18 @@ public class ResumeController {
 
     @GetMapping("")
     public ResponseEntity<?> getMyResumes(@AuthenticationPrincipal User currentUser) {
-        User user = userService.findByPhoneNumber(currentUser.getPhoneNumber());
-        Employee employee = employeeService.getEmployee(user.getId());
-        List<Resume> resumes = resumeService.getMyResumes(employee.getId());
-        List<ResumeDTO> resumeDTOs = resumes
-                                        .stream()
-                                        .map(resume -> modelMapper.map(resume, ResumeDTO.class))
-                                        .collect(Collectors.toList());
-        return ResponseEntity.ok(resumeDTOs);
+        try {            
+            User user = userService.findByPhoneNumber(currentUser.getPhoneNumber());
+            Employee employee = employeeService.getEmployee(user.getId());
+            List<Resume> resumes = resumeService.getMyResumes(employee.getId());
+            List<ResumeDTO> resumeDTOs = resumes
+                                            .stream()
+                                            .map(resume -> modelMapper.map(resume, ResumeDTO.class))
+                                            .collect(Collectors.toList());
+            return ResponseEntity.ok(resumeDTOs);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi server");
+        }
     }
 
     @PostMapping("/upload")

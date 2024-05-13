@@ -25,24 +25,36 @@ public class ResumeWorkController {
 
     @GetMapping("")
     ResponseEntity<?> getResumeWorks(@RequestParam String workId) {
-        int workIdReq = Integer.valueOf(workId);
-        List<ResumeWork> resumeWorks = resumeWorkService.getResumeWorksByWorkId(workIdReq);
-        List<ResumeWorkDTO> resumeDTOs = resumeWorks
-                .stream()
-                .map(resumeWork -> modelMapper.map(resumeWork, ResumeWorkDTO.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(resumeDTOs);
+        try {
+            int workIdReq = Integer.valueOf(workId);
+            List<ResumeWork> resumeWorks = resumeWorkService.getResumeWorksByWorkId(workIdReq);
+            List<ResumeWorkDTO> resumeDTOs = resumeWorks
+                    .stream()
+                    .map(resumeWork -> modelMapper.map(resumeWork, ResumeWorkDTO.class))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(resumeDTOs);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi server");
+        }
     }
 
     @PostMapping("")
     ResponseEntity<?> applyWork(@Valid @RequestBody ResumeWorkRequest resumeWorkRequest) {
-        ResumeWork result = resumeWorkService.applyWork(resumeWorkRequest);
-        return ResponseEntity.ok("Tao thanh cong");
+        try {            
+            ResumeWork result = resumeWorkService.applyWork(resumeWorkRequest);
+            return ResponseEntity.ok("Tạo thành công");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi server");
+        }
     }
 
     @PostMapping("/hire")
     ResponseEntity<?> decideStatusResumeWork(@Valid @RequestBody ResumeWorkStatusRequest resumeWorkRequest) {
-        ResumeWork result = resumeWorkService.decideStatus(resumeWorkRequest);
-        return ResponseEntity.ok("Thanh cong");
+        try {
+            ResumeWork result = resumeWorkService.decideStatus(resumeWorkRequest);
+            return ResponseEntity.ok("Thành công");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi server");
+        }
     }
 }

@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "notification")
 @Entity
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -41,7 +41,7 @@ public class Notification extends BaseEntity {
 
     private String content;
 
-    private String companyDetail;
+    private List<String> companyDetail;
 
-    private String jobDetail;
+    private List<String> jobDetail;
 }

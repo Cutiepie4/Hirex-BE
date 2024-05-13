@@ -25,16 +25,24 @@ public class AppreciationController {
 
     @GetMapping("")
     ResponseEntity<?> getAppreciations(@RequestParam String id) {
-        Long appreciationId = Long.valueOf(id);
-        Appreciation appreciation = appreciationService.validateAndGetAppreciationById(appreciationId);
-        AppreciationDTO appreciationDTO = modelMapper.map(appreciation, AppreciationDTO.class);
-        return ResponseEntity.ok(appreciationDTO);
+        try {
+            Long appreciationId = Long.valueOf(id);
+            Appreciation appreciation = appreciationService.validateAndGetAppreciationById(appreciationId);
+            AppreciationDTO appreciationDTO = modelMapper.map(appreciation, AppreciationDTO.class);
+            return ResponseEntity.ok(appreciationDTO);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi server");
+        }
     }
 
     @PostMapping("")
     ResponseEntity<?> applyWork(@Valid @RequestBody AppreciationRequest appreciationRequest) {
-        Appreciation result = appreciationService.saveAppreciation(appreciationRequest);
-        return ResponseEntity.ok(result);
+        try {
+            Appreciation result = appreciationService.saveAppreciation(appreciationRequest);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi server");
+        }
     }
 
 }
