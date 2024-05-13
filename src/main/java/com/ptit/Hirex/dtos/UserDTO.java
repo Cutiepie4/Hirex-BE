@@ -36,6 +36,8 @@ public class UserDTO {
     private String address;
 
     private String mail;
+    
+    private String gender;
 
     @JsonProperty("date_of_birth")
     private String dateOfBirth;

@@ -172,6 +172,7 @@ public class UserServiceImpl implements UserService {
 		String address = userUpdateDTO.getAddress();
 		String mail = userUpdateDTO.getMail();
 		String dateOfBirth = userUpdateDTO.getDateOfBirth();
+		String gender = userUpdateDTO.getGender();
 
 		Optional<User> optionalUser = userRepository.findByPhoneNumber(userUpdateDTO.getPhoneNumber());
 
@@ -192,7 +193,9 @@ public class UserServiceImpl implements UserService {
 		if (dateOfBirth != null) {
 			user.setDateOfBirth(dateOfBirth);
 		}
-
+		if (gender != null) {
+			user.setGender(gender);
+		}
 		User updatedUser = userRepository.save(user);
 
 		return updatedUser;

@@ -21,6 +21,8 @@ public class UserUpdateDTO {
     private String address;
 
     private String mail;
+    
+    private String gender;
 
     private String dateOfBirth;
 	
