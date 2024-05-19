@@ -1,5 +1,6 @@
 package com.ptit.Hirex.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,12 +24,32 @@ public class NotificationController {
     private final NotificationService notificationService;
     private final ModelMapper modelMapper;
 
+    public NotificationReceiverDTO toNotificationReceiverDTO(NotificationReceiver notificationReceiver) {
+        if (notificationReceiver == null) {
+            return null;
+        }
+
+        NotificationReceiverDTO dto = new NotificationReceiverDTO();
+        dto.setId(notificationReceiver.getId());
+        dto.setRead(notificationReceiver.isRead());
+
+        Notification notification = notificationReceiver.getNotification();
+        if (notification != null) {
+            dto.setNotificationTitle(notification.getTitle());
+            dto.setNotificationContent(notification.getContent());
+            dto.setNotificationCompanyDetail(notification.getCompanyDetail());
+            dto.setNotificationJobDetail(notification.getJobDetail());
+        }
+        dto.setCreatedAt(notificationReceiver.getNotification().getCreatedAt());
+        return dto;
+    }
+
     @GetMapping("")
     ResponseEntity<?> getNotifications(@AuthenticationPrincipal User currentUser) {
         try {
             List<NotificationReceiver> notifications = notificationService.getMyNotifications(currentUser.getId());
             List<NotificationReceiverDTO> notificationDTOs = notifications.stream()
-                    .map(notification -> modelMapper.map(notification.getNotification(), NotificationReceiverDTO.class))
+                    .map(this::toNotificationReceiverDTO)
                     .collect(Collectors.toList());
             return ResponseEntity.ok(notificationDTOs);
         } catch (Exception e) {
@@ -36,7 +57,7 @@ public class NotificationController {
         }
     }
 
-    @PostMapping("/read/{id}")
+    @GetMapping("/read/{id}")
     ResponseEntity<?> markRead(@PathVariable String id) {
         try {
             NotificationReceiver notification = notificationService.markRead(Long.valueOf(id));
@@ -47,15 +68,15 @@ public class NotificationController {
         }
     }
 
-    @PostMapping("/read-all")
+    @GetMapping("/read-all")
     ResponseEntity<?> markReadAll(@AuthenticationPrincipal User currentUser) {
         try {
             List<NotificationReceiver> notification = notificationService
                     .markReadAll(Long.valueOf(currentUser.getId()));
-
-            return ResponseEntity.ok("Thành công");
+            return ResponseEntity.ok(notification);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Lỗi server");
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("loi roi");
         }
     }
 

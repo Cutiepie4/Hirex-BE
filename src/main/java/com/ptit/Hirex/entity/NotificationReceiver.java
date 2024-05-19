@@ -9,11 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,7 +19,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class NotificationReceiver {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,12 +32,11 @@ public class NotificationReceiver {
     @JoinColumn(name = "notification_id", referencedColumnName = "id")
     private Notification notification;
 
-    @Builder.Default
-    private boolean read = false;
+    private boolean read;
 
     public NotificationReceiver(User receiver, Notification notification) {
         this.receiver = receiver;
         this.notification = notification;
+        this.read = false;
     }
-
 }

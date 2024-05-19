@@ -60,10 +60,12 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    @Transactional
     public List<NotificationReceiver> markReadAll(Long userId) {
         List<NotificationReceiver> notificationReceivers = getMyNotifications(userId);
-        for (NotificationReceiver notificationReceiver : notificationReceivers)
+        for (NotificationReceiver notificationReceiver : notificationReceivers) {
             notificationReceiver.setRead(true);
+        }
         return notificationReceiverRepository.saveAll(notificationReceivers);
     }
 

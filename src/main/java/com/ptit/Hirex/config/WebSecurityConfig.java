@@ -24,12 +24,12 @@ import lombok.RequiredArgsConstructor;
 public class WebSecurityConfig {
 
     private final JwtTokenFilter jwtTokenFilter;
-    
+
     @Value("${api.prefix}")
     private String apiPrefix;
-    
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)  throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
@@ -43,49 +43,42 @@ public class WebSecurityConfig {
                                     String.format("%s/users/**", apiPrefix),
                                     String.format("%s/works/**", apiPrefix),
                                     String.format("%s/users/updateUser", apiPrefix),
-                                    String.format("%s/users/by-phone", apiPrefix)
-                            )
+                                    String.format("%s/users/by-phone", apiPrefix))
                             .permitAll()
-//                            .requestMatchers(GET, "/test")
-//                            .hasAnyRole(Role.ADMIN)
-                          .requestMatchers(GET, "/test").permitAll()
-                          
-                          .requestMatchers(POST, String.format("%s/experiences/create", apiPrefix)).permitAll()
-                          .requestMatchers(POST, String.format("%s/educations/create", apiPrefix)).permitAll()
-                          .requestMatchers(POST, String.format("%s/resumes/upload", apiPrefix)).permitAll()
-                          .requestMatchers(POST, String.format("%s/skills/create", apiPrefix)).permitAll()
+                            // .requestMatchers(GET, "/test")
+                            // .hasAnyRole(Role.ADMIN)
+                            .requestMatchers(GET, "/test").permitAll()
 
-                          
-                          .requestMatchers(DELETE, String.format("%s/experiences/**", apiPrefix)).permitAll()
-                          .requestMatchers(DELETE, String.format("%s/educations/**", apiPrefix)).permitAll()
-                          .requestMatchers(DELETE, String.format("%s/certifications/**", apiPrefix)).permitAll()
-                          .requestMatchers(DELETE, String.format("%s/resumes/**", apiPrefix)).permitAll()
-                          .requestMatchers(DELETE, String.format("%s/skills/**", apiPrefix)).permitAll()
-                          .requestMatchers(DELETE, String.format("%s/companies/**", apiPrefix)).permitAll()
+                            .requestMatchers(POST, String.format("%s/experiences/create", apiPrefix)).permitAll()
+                            .requestMatchers(POST, String.format("%s/educations/create", apiPrefix)).permitAll()
+                            .requestMatchers(POST, String.format("%s/resumes/upload", apiPrefix)).permitAll()
+                            .requestMatchers(POST, String.format("%s/skills/create", apiPrefix)).permitAll()
 
+                            .requestMatchers(DELETE, String.format("%s/experiences/**", apiPrefix)).permitAll()
+                            .requestMatchers(DELETE, String.format("%s/educations/**", apiPrefix)).permitAll()
+                            .requestMatchers(DELETE, String.format("%s/certifications/**", apiPrefix)).permitAll()
+                            .requestMatchers(DELETE, String.format("%s/resumes/**", apiPrefix)).permitAll()
+                            .requestMatchers(DELETE, String.format("%s/skills/**", apiPrefix)).permitAll()
+                            .requestMatchers(DELETE, String.format("%s/companies/**", apiPrefix)).permitAll()
 
-                          .requestMatchers(PUT, String.format("%s/experiences/**", apiPrefix)).permitAll()
-                          .requestMatchers(PUT, String.format("%s/educations/**", apiPrefix)).permitAll()
-                          .requestMatchers(PUT, String.format("%s/certifications/**", apiPrefix)).permitAll()
-                          .requestMatchers(PUT, String.format("%s/skills/**", apiPrefix)).permitAll()
-                          .requestMatchers(PUT, String.format("%s/companies/**", apiPrefix)).permitAll()
+                            .requestMatchers(PUT, String.format("%s/experiences/**", apiPrefix)).permitAll()
+                            .requestMatchers(PUT, String.format("%s/educations/**", apiPrefix)).permitAll()
+                            .requestMatchers(PUT, String.format("%s/certifications/**", apiPrefix)).permitAll()
+                            .requestMatchers(PUT, String.format("%s/skills/**", apiPrefix)).permitAll()
+                            .requestMatchers(PUT, String.format("%s/companies/**", apiPrefix)).permitAll()
 
-                          
-                          .requestMatchers(GET, String.format("%s/employees/**", apiPrefix)).permitAll()
-                          .requestMatchers(GET, String.format("%s/companies/**", apiPrefix)).permitAll()
+                            .requestMatchers(GET, String.format("%s/employees/**", apiPrefix)).permitAll()
+                            .requestMatchers(GET, String.format("%s/companies/**", apiPrefix)).permitAll()
 
-                          .requestMatchers(POST, String.format("%s/certifications/create", apiPrefix)).permitAll()
-                          .requestMatchers(PUT, String.format("%s/employees/**", apiPrefix)).permitAll()
-                          .requestMatchers(POST, String.format("%s/companies/create", apiPrefix)).permitAll()
-                          .requestMatchers(GET, String.format("%s/employer/**", apiPrefix)).permitAll()
+                            .requestMatchers(POST, String.format("%s/certifications/create", apiPrefix)).permitAll()
+                            .requestMatchers(PUT, String.format("%s/employees/**", apiPrefix)).permitAll()
+                            .requestMatchers(POST, String.format("%s/companies/create", apiPrefix)).permitAll()
+                            .requestMatchers(GET, String.format("%s/employer/**", apiPrefix)).permitAll()
 
-
-
-                          
-                          .anyRequest().authenticated();
+                            .anyRequest().authenticated();
                 })
                 .csrf(AbstractHttpConfigurer::disable);
-        
+
         return http.build();
     }
 }
