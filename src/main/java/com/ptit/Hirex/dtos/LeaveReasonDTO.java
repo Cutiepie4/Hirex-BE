@@ -1,5 +1,7 @@
 package com.ptit.Hirex.dtos;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,5 +17,6 @@ import lombok.Setter;
 @Setter
 public class LeaveReasonDTO {
     private String leaveReason;
-    private int itemId;
+    private LocalDate dateReason;
+    private int work_id;
 }

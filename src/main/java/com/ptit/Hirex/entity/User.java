@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -42,12 +43,27 @@ public class User extends BaseEntity implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+    @Column(name = "fullname", length = 100)
+    private String fullName;
+
+    @Column(name = "address", length = 200)
+    private String address;
+    
 	@Column(name = "phone_number", length = 10, nullable = false)
 	private String phoneNumber;
 
 	@JsonIgnore
 	@Column(name = "password", length = 200, nullable = false)
 	private String password;
+	
+    @Column(name = "date_of_birth")
+    private String dateOfBirth;
+    
+    @Column(name = "mail")
+    private String mail;
+    
+    @Column(name = "image_base64", columnDefinition = "TEXT")
+    private String imageBase64;
 
 	@JsonIgnore
 	@Column(name = "is_active")

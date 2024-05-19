@@ -32,6 +32,9 @@ public class Items {
     private LocalDateTime notification;
     private String type_notif;
 
+    @ManyToOne
+    @JoinColumn(name = "work_id", referencedColumnName = "id")
+    private Work work;
     
     @ManyToOne
     @JoinColumn(name = "schedule_id", referencedColumnName = "id")

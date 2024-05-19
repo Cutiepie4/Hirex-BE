@@ -15,5 +15,5 @@ import lombok.*;
 @Setter
 public class SchedulesDTO {
     private LocalDate date;
-    private Items items;
+    private ItemsDTO itemsDTO;
 }

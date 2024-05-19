@@ -24,10 +24,6 @@ public class Schedule {
 
     private LocalDate date;
 
-    @ManyToOne
-    @JoinColumn(name = "work_id", referencedColumnName = "id")
-    private Work work;
-
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Items> items;

@@ -3,6 +3,7 @@ package com.ptit.Hirex.controller;
 import com.ptit.Hirex.dtos.SchedulesDTO;
 import com.ptit.Hirex.entity.Items;
 import com.ptit.Hirex.entity.Schedule;
+import com.ptit.Hirex.responses.ScheduleResponse;
 import com.ptit.Hirex.service.impl.ScheduleServiceImpl;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,11 +30,25 @@ import java.util.List;
 public class ScheduleController {
     private final ScheduleServiceImpl scheduleServiceImpl;
 
-    @GetMapping("/schedules_by_user/{phoneNumber}")
-    public List<Schedule> getAllSchedules(@PathVariable String phoneNumber) {
+    @GetMapping("/schedules_by_user/{phoneNumber}/{dateStart}/{dateEnd}")
+    public List<ScheduleResponse> getAllSchedules(@PathVariable String phoneNumber, @PathVariable LocalDate dateStart, 
+            @PathVariable LocalDate dateEnd) {
         try {
-            return scheduleServiceImpl.getSchedulesByUserId(phoneNumber);
+            // System.out.println(dateStart + " "+ dateEnd);
+            return scheduleServiceImpl.getSchedulesByUserId(phoneNumber, dateStart, dateEnd);
         } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    @GetMapping("/mark-date/{phoneNumber}")
+    public List<Schedule> getMarkDate(@PathVariable String phoneNumber) {
+        try {
+            // System.out.println(dateStart + " "+ dateEnd);
+            return scheduleServiceImpl.getMarkDate(phoneNumber);
+        } catch (Exception e) {
+            e.printStackTrace();
             return Collections.emptyList();
         }
     }
@@ -40,7 +56,7 @@ public class ScheduleController {
     @PostMapping("/schedules/{phoneNumber}")
     public ResponseEntity<?> createSchedule(@PathVariable String phoneNumber ,@RequestBody SchedulesDTO schedulesDTO) {
         try {
-            Schedule newSchedule = scheduleServiceImpl.createSchedule(phoneNumber ,schedulesDTO);
+            Items newSchedule = scheduleServiceImpl.createSchedule(phoneNumber ,schedulesDTO);
             return ResponseEntity.ok(newSchedule);
         } catch (IllegalArgumentException e) {
             System.out.println("kfds" + e.getMessage());
@@ -61,6 +77,7 @@ public class ScheduleController {
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
     }

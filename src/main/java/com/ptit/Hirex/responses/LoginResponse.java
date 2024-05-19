@@ -18,5 +18,10 @@ public class LoginResponse {
     @JsonProperty("role")
     private String role;
     
+    @JsonProperty("id")
+    private Long id;
+    
+    @JsonProperty("fullname")
+    private String fullname;
 
 }
