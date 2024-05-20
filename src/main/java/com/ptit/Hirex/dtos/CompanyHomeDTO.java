@@ -1,5 +1,7 @@
 package com.ptit.Hirex.dtos;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Company0DTO {
+public class CompanyHomeDTO {
     private Long id;
     private String name;
     private String shortName;
@@ -19,7 +21,10 @@ public class Company0DTO {
     private String industry;
     private String website;
     private String imageBase64;
-    private Long employerId; 
-    private ReviewDTO review;
-    
+    private double avgOverallRate;
+    private double avgSalaryRate;
+    private double avgManagementRate;
+    private double avgCultureRate;
+    private double avgOfficeRate;
+    private long recommendPercent;
 }

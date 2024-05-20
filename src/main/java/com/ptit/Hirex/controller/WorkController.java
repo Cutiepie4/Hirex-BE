@@ -1,11 +1,15 @@
 package com.ptit.Hirex.controller;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.ptit.Hirex.dtos.*;
 import com.ptit.Hirex.entity.Work;
+import com.ptit.Hirex.repository.WorkRepository;
 import com.ptit.Hirex.service.WorkService;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +23,20 @@ public class WorkController {
     private final WorkService workService;
     private final ModelMapper modelMapper;
 
+	@GetMapping("")
+    ResponseEntity<?> getWorks(@RequestParam(required = false) String companyId) {
+        try {
+            List<Work> works = workService.getWorks(companyId);
+            List<WorkEmployeeDTO> workDTOs = works
+                    .stream()
+                    .map(work -> modelMapper.map(work, WorkEmployeeDTO.class))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(workDTOs);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi server");
+        }
+    }
+
 	@GetMapping("/{id}")
     ResponseEntity<?>  getWork(@PathVariable String id, @RequestParam(required = false) String employer) {
         try {
@@ -31,7 +49,7 @@ public class WorkController {
                     CompanyDTO companyDTO = modelMapper.map(work.getCompany(), CompanyDTO.class);
                     companyDTO.setEmployer(employerDTO);
             
-                    WorkDTO workDTO = new WorkDTO(
+                    WorkDescriptionDTO workDTO = new WorkDescriptionDTO(
                         work.getId(),
                         work.getName(),
                         work.getAddress(),
@@ -40,6 +58,10 @@ public class WorkController {
                         work.getEndTime(),
                         work.getStartDate(),
                         work.getEndDate(),
+                        work.getJobPosition(),
+                        work.getTypeWork(),
+                        work.getTypeJob(),
+                        work.getWage(),
                         expertDTO,
                         companyDTO,
                         work.getCreateOn()

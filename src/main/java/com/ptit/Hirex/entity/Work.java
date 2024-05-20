@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -44,6 +46,7 @@ public class Work {
 
     private Long wage;
 
+    @JsonIgnore()
     @ManyToMany
     @JoinTable(
             name = "work_required_ability",
@@ -52,6 +55,7 @@ public class Work {
     )
     private List<Ability> requiredAbilities;
 
+    @JsonIgnore()
     @ManyToMany
     @JoinTable(
             name = "work_optional_ability",
@@ -60,6 +64,8 @@ public class Work {
     )
     private List<Ability> optionalAbilities;
 
+
+    @JsonIgnore()
     @ManyToOne
     @JoinColumn(name = "expert_id", referencedColumnName = "id")
     private Expert expert;
@@ -68,6 +74,7 @@ public class Work {
     @JoinColumn(name = "company_id", referencedColumnName = "id")
     private Company company;
 
+    @JsonIgnore()
     @ManyToMany
     @JoinTable(
         name = "work_employee", 
@@ -76,6 +83,7 @@ public class Work {
     )
     private List<Employee> employees;
 
+    @JsonIgnore()
     @OneToMany(mappedBy = "work", cascade = CascadeType.ALL)
     private List<ResumeWork> resumeWorks;
 

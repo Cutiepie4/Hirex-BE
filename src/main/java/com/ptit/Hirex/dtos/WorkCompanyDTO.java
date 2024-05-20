@@ -13,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class WorkDTO {
+public class WorkCompanyDTO {
     private int id;
 
     private String name;
@@ -30,11 +30,15 @@ public class WorkDTO {
 
     private LocalDate endDate;
 
-    // private List<Ability> requiredAbilities;
-    // private List<Ability> optionalAbilities;
+    private String jobPosition;
+    
+	private String typeWork;
+    
+    private String typeJob;
+
+    private Long wage;
+
     private ExpertDTO expert;
-    private CompanyDTO company;
-    // private Employer employer;
-    // private List<Employee> employees;
+
     private Instant createOn;
 }

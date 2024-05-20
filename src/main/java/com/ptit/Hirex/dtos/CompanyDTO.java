@@ -23,5 +23,4 @@ public class CompanyDTO {
     private String imageBase64;
     private EmployerDTO employer; 
     
-    private MultipartFile file;
 }

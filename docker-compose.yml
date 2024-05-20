@@ -1,6 +1,6 @@
 services:
   hirex-postgres:
-    image: postgres:latest
+    image: postgres:15.6-alpine
     ports:
       - 5433:5432
     environment:

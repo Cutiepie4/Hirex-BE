@@ -47,13 +47,14 @@ public class ResumeWorkController {
             return ResponseEntity.internalServerError().body("Lỗi server");
         }
     }
-
+    
     @PostMapping("/hire")
     ResponseEntity<?> decideStatusResumeWork(@Valid @RequestBody ResumeWorkStatusRequest resumeWorkRequest) {
         try {
             ResumeWork result = resumeWorkService.decideStatus(resumeWorkRequest);
             return ResponseEntity.ok("Thành công");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.internalServerError().body("Lỗi server");
         }
     }

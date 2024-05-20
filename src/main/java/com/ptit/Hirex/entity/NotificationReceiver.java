@@ -38,10 +38,6 @@ public class NotificationReceiver {
 
     private boolean read;
 
-    @PrePersist
-    protected void onCreate() {
-        read = false;
-    }
 
     public NotificationReceiver(User receiver, Notification notification) {
         this.receiver = receiver;

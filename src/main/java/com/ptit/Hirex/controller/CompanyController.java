@@ -1,7 +1,10 @@
 package com.ptit.Hirex.controller;
 
 import java.util.Base64;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ptit.Hirex.dtos.Company0DTO;
 import com.ptit.Hirex.dtos.CompanyDTO;
+import com.ptit.Hirex.dtos.CompanyHomeDTO;
 import com.ptit.Hirex.entity.Company;
 import com.ptit.Hirex.service.CompanyService;
 
@@ -30,7 +34,23 @@ public class CompanyController {
 
     @Autowired
     private CompanyService companyService;
+    @Autowired
+    private ModelMapper modelMapper;
     
+    @GetMapping("")
+    public ResponseEntity<?> getCompanies() {
+        try {
+            List<Company> companies = companyService.getCompanies();
+            List<CompanyHomeDTO> companyHomeDTOs = companies
+                .stream()
+                .map(company -> modelMapper.map(company, CompanyHomeDTO.class))
+                .collect(Collectors.toList());
+            return ResponseEntity.ok(companyHomeDTOs);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error fetching company", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getCompany(@PathVariable Long id) {
         try {
@@ -42,6 +62,15 @@ public class CompanyController {
             }
         } catch (Exception e) {
             return new ResponseEntity<>("Error fetching company", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/{id}/detail")
+    public ResponseEntity<?> getCompanyDetail(@PathVariable Long id) {
+        try {
+            return new ResponseEntity<>(companyService.getCompanyDetailById(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

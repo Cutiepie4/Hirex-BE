@@ -1,5 +1,6 @@
 package com.ptit.Hirex.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -8,18 +9,20 @@ import org.springframework.stereotype.Service;
 
 import com.ptit.Hirex.dtos.Company0DTO;
 import com.ptit.Hirex.dtos.CompanyDTO;
+import com.ptit.Hirex.dtos.CompanyDetailDTO;
 import com.ptit.Hirex.entity.Company;
+import com.ptit.Hirex.exceptions.EntityNotFoundException;
 import com.ptit.Hirex.repository.CompanyRepository;
 import com.ptit.Hirex.service.CompanyService;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
-	@Autowired
-	private CompanyRepository companyRepository;
-
-	@Autowired
-	private ModelMapper modelMapper;
+	private final CompanyRepository companyRepository;
+	private final ModelMapper modelMapper;
 
 	@Override
 	public Company saveCompany(Company0DTO companyDTO) {
@@ -35,6 +38,19 @@ public class CompanyServiceImpl implements CompanyService {
         }
         return null;
     }
+
+	@Override
+    public CompanyDetailDTO getCompanyDetailById(Long id) {
+		Company company = companyRepository.findById(id).orElse(null);
+		if (company == null) throw new EntityNotFoundException("Không tìm thấy công ty này");
+		return modelMapper.map(company, CompanyDetailDTO.class);
+	}
+
+	@Override
+    public List<Company> getCompanies() {
+        return companyRepository.findAll();
+    }
+
     private Company0DTO convertToDTO(Company company) {
         Company0DTO dto = new Company0DTO();
         dto.setImageBase64(company.getImageBase64());
