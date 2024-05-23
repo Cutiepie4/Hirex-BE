@@ -19,4 +19,6 @@ public interface CompanyService {
 	CompanyDetailDTO getCompanyDetailById(Long id);
 	
 	void deleteCompany(Long id);
+
+	CompanyDetailDTO getAllCompaniesWithReviewsSortedByRateDesc(Long id);
 }

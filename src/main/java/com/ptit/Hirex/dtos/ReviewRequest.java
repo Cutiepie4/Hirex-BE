@@ -11,6 +11,8 @@ import lombok.*;
 @Setter
 public class ReviewRequest {
 
+    private Long id;
+
     @NotBlank(message = "Tiêu đề  không được để trống")
     private String title;
 

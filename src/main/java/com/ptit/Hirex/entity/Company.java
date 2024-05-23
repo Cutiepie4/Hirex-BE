@@ -137,8 +137,6 @@ public class Company {
 		long rateReq = reviews.stream()
 				.filter(review -> review.getOverallRate() == 3)
 				.count();
-		System.out.println("--------------");
-		System.out.println(rateReq);
 		return Math.round(rateReq / totalReviews * 100);
 	}
 	@Transient

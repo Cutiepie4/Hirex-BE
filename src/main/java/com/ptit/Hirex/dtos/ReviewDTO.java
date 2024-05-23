@@ -22,6 +22,7 @@ public class ReviewDTO {
     private int cultureRate;
     private int officeRate;
     private Long companyId;
+    private Long userId;
     private boolean recommend;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

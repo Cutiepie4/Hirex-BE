@@ -17,6 +17,7 @@ public class ResumeDTO {
 	    private String nameFile;
 	    private String fileBase64;
 	    private long size;
+	    private Long employeeId; 
 	    private Long employerId; 
 	    
 }
