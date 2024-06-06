@@ -11,9 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.ptit.Hirex.dtos.ItemsDTO;
 import com.ptit.Hirex.dtos.SchedulesDTO;
+import com.ptit.Hirex.entity.Employee;
 import com.ptit.Hirex.entity.Items;
+import com.ptit.Hirex.entity.ResumeWork;
 import com.ptit.Hirex.entity.Schedule;
 import com.ptit.Hirex.entity.User;
+import com.ptit.Hirex.entity.Work;
 import com.ptit.Hirex.repository.ItemsRepository;
 import com.ptit.Hirex.repository.ScheduleRepository;
 import com.ptit.Hirex.repository.UserRepository;
@@ -59,10 +62,16 @@ public class ScheduleServiceImpl implements ScheduleService {
                     totalReaon = leaveReasonService.countReason(item.getWork().getId(), schedule.getDate());
                 }
                 Integer work_id = null;
+                Work work = new Work();
+                List<String> lEmployee = new ArrayList<>();
                 if(item.getWork()!=null){
                     work_id = item.getWork().getId();
+                    work = item.getWork();
+                    for(Employee emmEmployee: work.getEmployees()){
+                        lEmployee.add(emmEmployee.getUser().getFullName());
+                    }
                 }
-                ItemsDTO itemsDTO = new ItemsDTO(item.getStartTime(), item.getEndTime(), item.getTitle(), item.getType(), item.getNotes(), item.getNotification(), item.getType_notif(), work_id, item.getId(), totalReaon);
+                ItemsDTO itemsDTO = new ItemsDTO(item.getStartTime(), item.getEndTime(), item.getTitle(), item.getType(), item.getNotes(), item.getNotification(), item.getType_notif(), work_id, item.getId(), totalReaon, lEmployee);
                 lItemsDTOs.add(itemsDTO);
             }
             scheduleResponse.setItemsDTO(lItemsDTOs);

@@ -2,6 +2,7 @@ package com.ptit.Hirex.dtos;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -25,4 +26,5 @@ public class ItemsDTO {
     private Integer work_id;
     private int id;
     private int totalReason;
+    private List<String> nameEmployees;
 }
